@@ -1,418 +1,198 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails - Wedding Planner</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails - Wedding Planner</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            display: flex;
-        }
-
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            position: fixed;
-            color: white;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 32px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .menu-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .logout {
-            position: absolute;
-            bottom: 20px;
-            width: calc(100% - 40px);
-            padding: 15px;
-            background: rgba(255, 0, 0, 0.3);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
-            width: calc(100% - 250px);
-        }
-
-        .header {
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .breadcrumb {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .breadcrumb a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .details-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .detail-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .detail-card h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 22px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: #666;
-            font-weight: 600;
-        }
-
-        .detail-value {
-            color: #333;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .timeline {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .timeline h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .timeline-item {
-            padding: 15px;
-            border-left: 3px solid #667eea;
-            margin-bottom: 15px;
-            margin-left: 20px;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '●';
-            position: absolute;
-            left: -10px;
-            top: 15px;
-            color: #667eea;
-            font-size: 20px;
-        }
-
-        .timeline-date {
-            color: #999;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .timeline-text {
-            color: #333;
-            font-weight: 600;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .status-badge {
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            background: #d1fae5;
-            color: #065f46;
-            display: inline-block;
-        }
-
-        .icon {
-            font-size: 18px;
-            margin-right: 5px;
-        }
-    </style>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      position: fixed;
+      color: white;
+      padding: 20px;
+    }
+    .logo { font-size: 32px; text-align: center; }
+    .logo-text { font-size: 20px; font-weight: 600; text-align: center; margin-bottom: 40px; }
+    .menu-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .menu-item:hover { background: rgba(255,255,255,0.2); }
+    .logout {
+      position: absolute;
+      bottom: 20px;
+      width: calc(100% - 40px);
+      padding: 15px;
+      background: rgba(255,0,0,0.3);
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+      width: calc(100% - 250px);
+    }
+    .header h1 { font-size: 32px; margin-bottom: 10px; }
+    .details-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .detail-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    .detail-card h2 {
+      margin-bottom: 20px;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #d1fae5;
+      color: #065f46;
+      font-weight: bold;
+    }
+    .action-buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+    }
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="sidebar">
-        <div class="logo">💍</div>
-        <div class="logo-text">Wedding Planner</div>
-        
-        <div class="menu-item" onclick="window.location.href='../dashboard.html'">
-            📊 Dashboard
-        </div>
-        <div class="menu-item" onclick="window.location.href='clients.html'">
-            👥 Clients
-        </div>
-        <div class="menu-item" onclick="window.location.href='weddings.html'">
-            💒 Mariages
-        </div>
-        <div class="menu-item" onclick="window.location.href='vendors.html'">
-            🏢 Prestataires
-        </div>
-        <div class="menu-item" onclick="window.location.href='services.html'">
-            ⚙️ Services
-        </div>
-        <div class="menu-item" onclick="window.location.href='payments.html'">
-            💰 Paiements
-        </div>
-        
-        <div class="logout" onclick="logout()">
-            🚪 Déconnexion
-        </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">💍</div>
+    <div class="logo-text">Wedding Planner</div>
+
+    <div class="menu-item" onclick="window.location.href='../dashboard.html'">📊 Dashboard</div>
+    <div class="menu-item" onclick="window.location.href='clients.html'">👥 Clients</div>
+    <div class="menu-item" onclick="window.location.href='weddings.html'">💒 Mariages</div>
+    <div class="menu-item" onclick="window.location.href='vendors.html'">🏢 Prestataires</div>
+    <div class="menu-item" onclick="window.location.href='services.html'">⚙️ Services</div>
+    <div class="menu-item" onclick="window.location.href='payments.html'">💰 Paiements</div>
+
+    <div class="logout" onclick="logout()">🚪 Déconnexion</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="header">
+      <h1>📋 Détails du Client</h1>
     </div>
 
-    <div class="main-content">
-        <div class="header">
-            <h1>📋 Détails du Mariage</h1>
-            <div class="breadcrumb">
-                <a href="../dashboard.html">Dashboard</a> / 
-                <a href="weddings.html">Mariages</a> / 
-                Détails
-            </div>
+    <div class="details-container">
+      <div class="detail-card">
+        <h2>👤 Informations Client</h2>
+        <div class="detail-row">
+          <span>ID</span>
+          <span id="client-id"></span>
         </div>
-
-        <div class="details-container">
-            <!-- Informations principales -->
-            <div class="detail-card">
-                <h2><span class="icon">💒</span>Informations du Mariage</h2>
-                <div class="detail-row">
-                    <span class="detail-label">ID</span>
-                    <span class="detail-value">#001</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Couple</span>
-                    <span class="detail-value">Sarah & Ahmed</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Date du mariage</span>
-                    <span class="detail-value">15 Juin 2026</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Lieu</span>
-                    <span class="detail-value">Hôtel Sofitel Casablanca</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Statut</span>
-                    <span class="status-badge">Confirmé</span>
-                </div>
-            </div>
-
-            <!-- Informations financières -->
-            <div class="detail-card">
-                <h2><span class="icon">💰</span>Informations Financières</h2>
-                <div class="detail-row">
-                    <span class="detail-label">Budget total</span>
-                    <span class="detail-value">150,000 DH</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Montant payé</span>
-                    <span class="detail-value">90,000 DH</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Reste à payer</span>
-                    <span class="detail-value">60,000 DH</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Acompte</span>
-                    <span class="detail-value">30,000 DH</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Date limite paiement</span>
-                    <span class="detail-value">01 Juin 2026</span>
-                </div>
-            </div>
-
-            <!-- Contacts -->
-            <div class="detail-card">
-                <h2><span class="icon">📞</span>Contacts</h2>
-                <div class="detail-row">
-                    <span class="detail-label">Email</span>
-                    <span class="detail-value">sarah.ahmed@email.com</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Téléphone</span>
-                    <span class="detail-value">+212 612 345 678</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Téléphone 2</span>
-                    <span class="detail-value">+212 623 456 789</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Adresse</span>
-                    <span class="detail-value">Casablanca, Maroc</span>
-                </div>
-            </div>
-
-            <!-- Prestataires -->
-            <div class="detail-card">
-                <h2><span class="icon">🏢</span>Prestataires</h2>
-                <div class="detail-row">
-                    <span class="detail-label">Traiteur</span>
-                    <span class="detail-value">Traiteur Royal</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Photographe</span>
-                    <span class="detail-value">Photo Pro Studio</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">DJ</span>
-                    <span class="detail-value">DJ Marocain</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Fleuriste</span>
-                    <span class="detail-value">Fleurs de Casablanca</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Décorateur</span>
-                    <span class="detail-value">Déco Élégance</span>
-                </div>
-            </div>
-
-            <!-- Timeline -->
-            <div class="detail-card full-width">
-                <h2><span class="icon">📅</span>Chronologie des Événements</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">02 Janvier 2026</div>
-                        <div class="timeline-text">Premier contact avec les clients</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">05 Janvier 2026</div>
-                        <div class="timeline-text">Réunion de planification initiale</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">10 Janvier 2026</div>
-                        <div class="timeline-text">Signature du contrat</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">15 Janvier 2026</div>
-                        <div class="timeline-text">Versement de l'acompte (30,000 DH)</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">20 Janvier 2026</div>
-                        <div class="timeline-text">Sélection des prestataires</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">En attente</div>
-                        <div class="timeline-text">Paiement final prévu pour le 01 Juin 2026</div>
-                    </div>
-                </div>
-            </div>
+        <div class="detail-row">
+          <span>Nom</span>
+          <span id="client-name"></span>
         </div>
-
-        <!-- Boutons d'action -->
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="window.location.href='weddings.html'">
-                ← Retour à la liste
-            </button>
-            <button class="btn btn-primary" onclick="alert('Fonction d\'impression à venir')">
-                🖨️ Imprimer
-            </button>
-            <button class="btn btn-secondary" onclick="alert('Fonction d\'export à venir')">
-                📄 Exporter PDF
-            </button>
+        <div class="detail-row">
+          <span>Email</span>
+          <span id="client-email"></span>
         </div>
+        <div class="detail-row">
+          <span>Statut</span>
+          <span class="status-badge">Actif</span>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h2>📞 Contact</h2>
+        <div class="detail-row">
+          <span>Téléphone</span>
+          <span>+212 600 000 000</span>
+        </div>
+        <div class="detail-row">
+          <span>Ville</span>
+          <span>Maroc</span>
+        </div>
+      </div>
     </div>
 
-    <script>
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = '../index.html';
-        }
+    <div class="action-buttons">
+      <button class="btn btn-primary" onclick="window.location.href='clients.html'">
+        ← Retour
+      </button>
+      <button class="btn btn-secondary">📄 Export PDF</button>
+    </div>
+  </div>
 
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userEmail');
-            window.location.href = '../index.html';
-        }
-    </script>
+  <!-- AUTH -->
+  <script>
+    if (!localStorage.getItem("isLoggedIn")) {
+      window.location.href = "../index.html";
+    }
+    function logout() {
+      localStorage.clear();
+      window.location.href = "../index.html";
+    }
+  </script>
+
+  <!-- API + DETAILS SCRIPT -->
+  <script src="../assets/js/api.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const clientId = params.get("id");
+
+    async function loadClientDetails() {
+      const clients = await getClients();
+      const client = clients.find(c => c.id == clientId);
+      if (!client) return;
+
+      document.getElementById("client-id").textContent = "#" + client.id;
+      document.getElementById("client-name").textContent =
+        client.first_name + " " + client.last_name;
+      document.getElementById("client-email").textContent = client.email;
+    }
+
+    loadClientDetails();
+  </script>
+
 </body>
 </html>
- 

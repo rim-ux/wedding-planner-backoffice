@@ -3,277 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mariages - Wedding Planner</title>
+    <title>Mariages - Golden Promise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Georgia', serif; 
+            background: #F5F0EB; 
+            color: #2B3A2F;
+            display: flex; margin-top: 80px;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            display: flex;
-        }
-
+        
+        /* SIDEBAR GOLDEN PROMISE */
         .sidebar {
-            width: 250px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            position: fixed;
-            color: white;
-            padding: 20px;
+            width: 280px; background: #5A6B4D; 
+            height: 100vh; position: fixed;
+            color: white; padding: 30px 0;
         }
-
-        .logo {
-            font-size: 32px;
-            text-align: center;
-            margin-bottom: 10px;
+        .logo-section { 
+            padding: 0 30px 30px; 
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 40px;
+        .logo-section h2 { 
+            font-size: 20px; color: #9AB396; 
+            letter-spacing: 2px; text-transform: uppercase;
         }
-
         .menu-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
+            display: flex; align-items: center; gap: 15px;
+            padding: 15px 20px; color: #E5DED5;
+            border-radius: 8px; margin-bottom: 5px;
+            cursor: pointer; font-size: 14px; transition: all 0.3s;
         }
-
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .menu-item.active {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .logout {
-            position: absolute;
-            bottom: 20px;
-            width: calc(100% - 40px);
-            padding: 15px;
-            background: rgba(255, 0, 0, 0.3);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
-            width: calc(100% - 250px);
-        }
-
+        .menu-item:hover { background: rgba(154,179,150,0.2); color: white; }
+        .menu-item.active { background: rgba(154,179,150,0.3); }
+        .menu-item span { font-size: 20px; }
+        
+        .main-content { margin-left: 280px; flex: 1; padding: 40px; }
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+            background: white; padding: 30px;
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 30px;
         }
-
-        .header h1 {
-            color: #333;
-            font-size: 32px;
+        .header h1 { 
+            font-size: 28px; color: #5A6B4D; 
+            font-weight: 300; display: flex; align-items: center; gap: 12px;
         }
-
-        .btn-add {
-            padding: 12px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
+        
+        .btn-primary {
+            padding: 15px 30px; background: #9AB396;
+            color: white; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 13px; font-weight: 500;
+            letter-spacing: 1px; transition: all 0.3s;
+            font-family: 'Georgia', serif; text-transform: uppercase;
         }
-
+        .btn-primary:hover { 
+            background: #7F9B7A; transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(154,179,150,0.3);
+        }
+        
         .table-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            background: white; border-radius: 12px;
+            overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            background: #F5F0EB; padding: 20px;
+            text-align: left; font-size: 13px; color: #5A6B4D;
+            letter-spacing: 1px; font-weight: 600; text-transform: uppercase;
         }
-
-        th {
-            background: #f8f9fa;
-            padding: 15px;
-            text-align: left;
-            color: #333;
-            font-weight: 600;
+        td { padding: 20px; border-bottom: 1px solid #F5F0EB; }
+        tr:hover { background: #FEFDFB; }
+        
+        /* ✅ BADGES MARIAGE GOLDEN PROMISE */
+        .badge { 
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; letter-spacing: 1px;
         }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-            color: #666;
+        .badge-planifie { background: #F4B400; color: white; }
+        .badge-confirme { background: #9AB396; color: white; }
+        .badge-termine { background: #5A6B4D; color: white; }
+        
+        .btn-small {
+            padding: 8px 16px; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 11px; margin-right: 8px;
+            font-family: 'Georgia', serif; letter-spacing: 1px;
         }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .btn-edit {
-            padding: 8px 15px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-
-        .btn-delete {
-            padding: 8px 15px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
+        .btn-edit { background: #9AB396; color: white; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-small:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        /* MODAL */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(43,58,47,0.9);
+            justify-content: center; align-items: center; z-index: 2000;
         }
-
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 500px;
-            max-width: 90%;
+            background: #FEFDFB; padding: 40px;
+            border-radius: 12px; width: 500px; max-width: 90%;
+            border: 2px solid #9AB396; position: relative;
         }
-
-        .modal-header {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+        .close-modal {
+            position: absolute; top: 20px; right: 25px;
+            font-size: 28px; cursor: pointer; color: #9B8B7E;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
+        .form-group { margin-bottom: 25px; }
         .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
+            display: block; color: #5A6B4D; font-size: 13px;
+            margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase;
         }
-
         .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
+            width: 100%; padding: 15px; border: 1px solid #E5DED5;
+            border-radius: 8px; font-size: 15px; font-family: 'Georgia', serif;
         }
-
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: #9AB396;
+        }
         .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-save {
-            flex: 1;
-            padding: 12px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            padding: 12px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-planifie {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-confirme {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-termine {
-            background: #e0e7ff;
-            color: #3730a3;
+            display: flex; gap: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">💍</div>
-        <div class="logo-text">Wedding Planner</div>
-        
-        <div class="menu-item" onclick="window.location.href='../dashboard.html'">
-            📊 Dashboard
+    <!-- 🔥 NAVBAR HAUT (FIXE) -->
+<nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #5A6B4D; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <div style="color: white; font-size: 24px; font-weight: bold; font-family: 'Georgia', serif;">
+        💍 GOLDEN PROMISE
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <!-- Langues -->
+        <select style="padding: 8px 12px; border: none; border-radius: 6px; background: rgba(255,255,255,0.1); color: white;">
+            <option>🇫🇷 FR</option>
+            <option>🇲🇦 AR</option>
+            <option>🇺🇸 EN</option>
+        </select>
+        <!-- Déconnexion -->
+        <button onclick="logout()" style="background: #dc3545; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 500;">
+            🚪 Déconnexion
+        </button>
+    </div>
+</nav>
+
+    <!-- SIDEBAR GOLDEN PROMISE -->
+    <aside class="sidebar">
+        <div class="logo-section">
+            <h2>GOLDEN PROMISE</h2>
+        </div>
+        <div class="menu-item" onclick="window.location.href='dashboard.html'">
+            <span>📊</span><span>Dashboard</span>
         </div>
         <div class="menu-item" onclick="window.location.href='clients.html'">
-            👥 Clients
+            <span>👥</span><span>Clients</span>
         </div>
-        <div class="menu-item active" onclick="window.location.href='weddings.html'">
-            💒 Mariages
+        <div class="menu-item active">
+            <span>💒</span><span>Mariages</span>
         </div>
         <div class="menu-item" onclick="window.location.href='vendors.html'">
-            🏢 Prestataires
+            <span>🏢</span><span>Prestataires</span>
         </div>
         <div class="menu-item" onclick="window.location.href='services.html'">
-            ⚙️ Services
+            <span>⚙️</span><span>Services</span>
         </div>
         <div class="menu-item" onclick="window.location.href='payments.html'">
-            💰 Paiements
+            <span>💰</span><span>Paiements</span>
         </div>
-        
-        <div class="logout" onclick="logout()">
-            🚪 Déconnexion
+        <div class="menu-item" onclick="logout()">
+            <span>🚪</span><span>Déconnexion</span>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
+    <main class="main-content">
         <div class="header">
-            <h1>💒 Gestion des Mariages</h1>
-            <button class="btn-add" onclick="openModal()">+ Ajouter un mariage</button>
+            <h1><i class="fas fa-ring"></i> Gestion Mariages</h1>
+            <button class="btn-primary" onclick="openModal()">+ Nouveau Mariage</button>
         </div>
 
         <div class="table-container">
@@ -282,114 +185,127 @@
                     <tr>
                         <th>ID</th>
                         <th>Couple</th>
-                        <th>Date du mariage</th>
+                        <th>Date</th>
                         <th>Lieu</th>
-                        <th>Budget (DH)</th>
+                        <th>Budget</th>
                         <th>Statut</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="weddingsTable">
+                    <!-- ✅ Rempli par JavaScript -->
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
 
+    <!-- MODAL AJOUT/MODIF -->
     <div class="modal" id="weddingModal">
         <div class="modal-content">
-            <h2 class="modal-header" id="modalTitle">Ajouter un mariage</h2>
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Nouveau Mariage</h2>
             <form id="weddingForm">
                 <div class="form-group">
-                    <label>Nom du couple</label>
-                    <input type="text" id="coupleName" required>
+                    <label>Nom du Couple</label>
+                    <input type="text" id="coupleName" placeholder="Ex: Sarah & Ahmed" required>
                 </div>
                 <div class="form-group">
-                    <label>Date du mariage</label>
+                    <label>Date Mariage</label>
                     <input type="date" id="weddingDate" required>
                 </div>
                 <div class="form-group">
                     <label>Lieu</label>
-                    <input type="text" id="venue" required>
+                    <input type="text" id="venue" placeholder="Ex: Hôtel Sofitel" required>
                 </div>
                 <div class="form-group">
-                    <label>Budget (DH)</label>
-                    <input type="number" id="budget" required>
+                    <label>Budget (€)</label>
+                    <input type="number" id="budget" placeholder="0" step="0.01" required>
                 </div>
                 <div class="form-group">
                     <label>Statut</label>
-                    <select id="status">
+                    <select id="status" required>
+                        <option value="">Choisir...</option>
                         <option value="Planifié">Planifié</option>
                         <option value="Confirmé">Confirmé</option>
                         <option value="Terminé">Terminé</option>
                     </select>
                 </div>
                 <div class="modal-buttons">
-                    <button type="submit" class="btn-save">Enregistrer</button>
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
+                    <button type="submit" class="btn-primary" style="flex: 1;">Enregistrer</button>
+                    <button type="button" class="btn-primary" onclick="closeModal()" style="flex: 1; background: #9B8B7E;">Annuler</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- ✅ TOUT INTÉGRÉ - AUCUN FICHIER EXTERN -->
     <script>
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = '../index.html';
+        // 🔐 Vérification auth
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'index.html';
         }
 
+        // ✅ DONNÉES MARIAGES INTÉGRÉES
         let weddings = [
-            { id: 1, couple: 'Sarah & Ahmed', date: '2026-06-15', venue: 'Hôtel Sofitel', budget: 150000, status: 'Confirmé' },
-            { id: 2, couple: 'Fatima & Karim', date: '2026-08-20', venue: 'Villa Mandarine', budget: 200000, status: 'Planifié' },
-            { id: 3, couple: 'Leila & Youssef', date: '2026-09-10', venue: 'Palais des congrès', budget: 180000, status: 'Planifié' }
+            { id: 1, couple: 'Sarah & Ahmed', date: '2026-06-15', venue: 'Hôtel Sofitel', budget: 15000, status: 'Confirmé' },
+            { id: 2, couple: 'Fatima & Karim', date: '2026-08-20', venue: 'Villa Mandarine', budget: 20000, status: 'Planifié' },
+            { id: 3, couple: 'Leila & Youssef', date: '2026-09-10', venue: 'Palais des Congrès', budget: 18000, status: 'Planifié' }
         ];
 
         let editingId = null;
 
+        // 🖼️ AFFICHER TABLEAU MARIAGES
         function displayWeddings() {
             const tbody = document.getElementById('weddingsTable');
-            tbody.innerHTML = '';
-            
-            weddings.forEach(wedding => {
-                const statusClass = wedding.status === 'Confirmé' ? 'status-confirme' : 
-                                   wedding.status === 'Terminé' ? 'status-termine' : 'status-planifie';
-                
-                tbody.innerHTML += `
+            tbody.innerHTML = weddings.map(wedding => {
+                const badgeClass = wedding.status === 'Confirmé' ? 'badge-confirme' : 
+                                 wedding.status === 'Terminé' ? 'badge-termine' : 'badge-planifie';
+                return `
                     <tr>
-                        <td>${wedding.id}</td>
-                        <td>${wedding.couple}</td>
-                        <td>${wedding.date}</td>
+                        <td><strong>#WED${wedding.id.toString().padStart(2,'0')}</strong></td>
+                        <td><strong>${wedding.couple}</strong></td>
+                        <td>${new Date(wedding.date).toLocaleDateString('fr-FR')}</td>
                         <td>${wedding.venue}</td>
-                        <td>${wedding.budget.toLocaleString()}</td>
-                        <td><span class="status-badge ${statusClass}">${wedding.status}</span></td>
+                        <td>€${parseFloat(wedding.budget).toLocaleString()}</td>
+                        <td><span class="badge ${badgeClass}">${wedding.status}</span></td>
                         <td>
-                            <button class="btn-edit" onclick="editWedding(${wedding.id})">✏️ Modifier</button>
-                            <button class="btn-delete" onclick="deleteWedding(${wedding.id})">🗑️ Supprimer</button>
+                            <button class="btn-small btn-edit" onclick="editWedding(${wedding.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-small btn-delete" onclick="deleteWedding(${wedding.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
-            });
+            }).join('');
         }
 
+        // ➕ OUVRIR MODAL
         function openModal() {
             document.getElementById('weddingModal').style.display = 'flex';
-            document.getElementById('modalTitle').textContent = 'Ajouter un mariage';
+            document.getElementById('modalTitle').textContent = 'Nouveau Mariage';
             document.getElementById('weddingForm').reset();
             editingId = null;
         }
 
+        // ❌ FERMER MODAL
         function closeModal() {
             document.getElementById('weddingModal').style.display = 'none';
         }
 
+        // 💾 ENREGISTRER MARIAGE
         document.getElementById('weddingForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const couple = document.getElementById('coupleName').value;
             const date = document.getElementById('weddingDate').value;
             const venue = document.getElementById('venue').value;
-            const budget = parseInt(document.getElementById('budget').value);
+            const budget = parseFloat(document.getElementById('budget').value);
             const status = document.getElementById('status').value;
             
             if (editingId) {
+                // ✏️ MODIFIER
                 const wedding = weddings.find(w => w.id === editingId);
                 wedding.couple = couple;
                 wedding.date = date;
@@ -397,6 +313,7 @@
                 wedding.budget = budget;
                 wedding.status = status;
             } else {
+                // ➕ AJOUTER
                 const newWedding = {
                     id: weddings.length + 1,
                     couple, date, venue, budget, status
@@ -408,6 +325,7 @@
             closeModal();
         });
 
+        // ✏️ MODIFIER MARIAGE
         function editWedding(id) {
             const wedding = weddings.find(w => w.id === id);
             document.getElementById('coupleName').value = wedding.couple;
@@ -415,11 +333,12 @@
             document.getElementById('venue').value = wedding.venue;
             document.getElementById('budget').value = wedding.budget;
             document.getElementById('status').value = wedding.status;
-            document.getElementById('modalTitle').textContent = 'Modifier le mariage';
+            document.getElementById('modalTitle').textContent = 'Modifier le Mariage';
             document.getElementById('weddingModal').style.display = 'flex';
             editingId = id;
         }
 
+        // 🗑️ SUPPRIMER MARIAGE
         function deleteWedding(id) {
             if (confirm('Voulez-vous vraiment supprimer ce mariage ?')) {
                 weddings = weddings.filter(w => w.id !== id);
@@ -427,14 +346,15 @@
             }
         }
 
+        // 🚪 LOGOUT
         function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userEmail');
-            window.location.href = '../index.html';
+            localStorage.clear();
+            window.location.href = 'index.html';
         }
 
+        // 🚀 INITIALISATION
         displayWeddings();
     </script>
 </body>
 </html>
- 
+

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Golden Promise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 🔥 CHART.JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Georgia', serif; 
+            background: #F5F0EB; 
+            color: #2B3A2F;
+            display: flex; margin-top: 120px; /* Navbar + Sidebar */
+        }
+        
+        /* 🔥 NAVBAR HAUT */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: #5A6B4D; padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        nav .logo { color: white; font-size: 24px; font-weight: bold; }
+        nav select, nav button { 
+            padding: 8px 12px; border: none; border-radius: 6px; 
+            background: rgba(255,255,255,0.1); color: white; cursor: pointer;
+        }
+        nav button { background: #dc3545; padding: 12px 24px; font-weight: 500; }
+        
+        .sidebar {
+            width: 280px; background: #5A6B4D; height: 100vh; position: fixed;
+            color: white; padding: 30px 0;
+        }
+        .logo-section { padding: 0 30px 30px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo-section h2 { font-size: 20px; color: #9AB396; letter-spacing: 2px; text-transform: uppercase; }
+        .menu-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px 20px;
+            color: #E5DED5; border-radius: 8px; margin-bottom: 5px; cursor: pointer;
+            font-size: 14px; transition: all 0.3s;
+        }
+        .menu-item:hover { background: rgba(154,179,150,0.2); color: white; }
+        .menu-item.active { background: rgba(154,179,150,0.3); }
+        
+        .main-content { margin-left: 280px; flex: 1; padding: 40px; }
+        .header {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 30px; text-align: center;
+        }
+        .header h1 { font-size: 32px; color: #5A6B4D; font-weight: 300; }
+        
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; margin-bottom: 40px;
+        }
+        .stat-card {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 4px solid #9AB396;
+            text-align: center;
+        }
+        .stat-number { font-size: 36px; font-weight: bold; color: #5A6B4D; }
+        .stat-label { font-size: 14px; color: #9B8B7E; letter-spacing: 1px; margin-top: 8px; }
+        
+        /* 🔥 5 GRAPHIQUES */
+        .charts-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px; margin-top: 30px;
+        }
+        .chart-card {
+            background: white; padding: 25px; border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .chart-card h3 {
+            color: #5A6B4D; margin-bottom: 20px; font-size: 18px; text-align: center;
+        }
+        .btn-primary {
+            padding: 6px 12px; background: #9AB396; color: white; border: none;
+            border-radius: 6px; cursor: pointer; font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔥 NAVBAR -->
+    <nav>
+        <div class="logo">💍 GOLDEN PROMISE</div>
+        <div>
+            <select>
+                <option>🇫🇷 FR</option>
+                <option>🇲🇦 AR</option>
+                <option>🇺🇸 EN</option>
+            </select>
+            <button onclick="logout()">🚪 Déconnexion</button>
+        </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-section"><h2>GOLDEN PROMISE</h2></div>
+        <div class="menu-item active"><span>📊</span><span>Dashboard</span></div>
+        <div class="menu-item" onclick="window.location.href='clients.html'"><span>👥</span><span>Clients</span></div>
+        <div class="menu-item" onclick="window.location.href='weddings.html'"><span>💒</span><span>Mariages</span></div>
+        <div class="menu-item" onclick="window.location.href='vendors.html'"><span>🏢</span><span>Prestataires</span></div>
+        <div class="menu-item" onclick="window.location.href='services.html'"><span>⚙️</span><span>Services</span></div>
+        <div class="menu-item" onclick="window.location.href='payments.html'"><span>💰</span><span>Paiements</span></div>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-tachometer-alt"></i> Dashboard Golden Promise</h1>
+            <p>Bienvenue, <strong id="userName">Sarah</strong></p>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">3</div>
+                <div class="stat-label">Clients</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalWeddings">3</div>
+                <div class="stat-label">Mariages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalVendors">4</div>
+                <div class="stat-label">Prestataires</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRevenue">16,700€</div>
+                <div class="stat-label">Chiffre d'affaires</div>
+            </div>
+        </div>
+
+        <!-- 🔥 5 GRAPHIQUES CHART.JS -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Statut Paiements</h3>
+                <canvas id="paymentsChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Mariages par Mois</h3>
+                <canvas id="weddingsChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Services Vendus</h3>
+                <canvas id="servicesChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Prestataires par Catégorie</h3>
+                <canvas id="vendorsChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Évolution Revenus</h3>
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <!-- 🔥 SCRIPT GRAPHIQUES + FONCTIONS -->
+    <script>
+        // 🔐 AUTH
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'index.html';
+        }
+        document.getElementById('userName').textContent = 
+            (localStorage.getItem('userEmail') || 'Sarah').split('@')[0];
+
+        // 🚪 LOGOUT
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // 🔥 5 GRAPHIQUES CHART.JS
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Doughnut - Statut Paiements
+            new Chart(document.getElementById('paymentsChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Validé', 'En attente', 'Échéance', 'Retard'],
+                    datasets: [{ 
+                        data: [12, 5, 3, 2], 
+                        backgroundColor: ['#10b981', '#F4B400', '#F97316', '#dc3545'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 2. Bar - Mariages par Mois
+            new Chart(document.getElementById('weddingsChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin'],
+                    datasets: [{ 
+                        label: 'Mariages', 
+                        data: [2, 3, 1, 4, 2, 5], 
+                        backgroundColor: '#9AB396',
+                        borderRadius: 8
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+
+            // 3. Pie - Services Vendus
+            new Chart(document.getElementById('servicesChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Premium', 'Standard', 'Light'],
+                    datasets: [{ 
+                        data: [8, 15, 7], 
+                        backgroundColor: ['#9AB396', '#F4B400', '#5A6B4D']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 4. PolarArea - Prestataires
+            new Chart(document.getElementById('vendorsChart'), {
+                type: 'polarArea',
+                data: {
+                    labels: ['Traiteur', 'Photo', 'Fleurs', 'DJ'],
+                    datasets: [{ 
+                        data: [10, 8, 6, 4], 
+                        backgroundColor: ['rgba(244,180,0,0.6)', 'rgba(154,179,150,0.6)', 'rgba(90,107,77,0.6)', 'rgba(220,53,69,0.6)']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 5. Line - Évolution Revenus
+            new Chart(document.getElementById('revenueChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mars', 'Avr'],
+                    datasets: [{ 
+                        label: 'Revenus €', 
+                        data: [15000, 22000, 18000, 28000], 
+                        borderColor: '#9AB396', 
+                        backgroundColor: 'rgba(154,179,150,0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

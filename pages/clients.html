@@ -1,36 +1,214 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clients - Wedding Planner</title>
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; margin: 0; padding: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-    th { background: #667eea; color: white; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients - Golden Promise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Georgia', serif; 
+            background: #F5F0EB; 
+            color: #2B3A2F;
+            display: flex; margin-top: 80px;
+        }
+        .sidebar {
+            width: 280px; background: #5A6B4D; 
+            height: 100vh; position: fixed;
+            color: white; padding: 30px 0;
+        }
+        .logo-section { padding: 0 30px 30px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo-section h2 { font-size: 20px; color: #9AB396; letter-spacing: 2px; text-transform: uppercase; }
+        .menu-item {
+            display: flex; align-items: center; gap: 15px;
+            padding: 15px 20px; color: #E5DED5;
+            border-radius: 8px; margin-bottom: 5px;
+            cursor: pointer; font-size: 14px; transition: all 0.3s;
+        }
+        .menu-item:hover { background: rgba(154,179,150,0.2); }
+        .menu-item.active { background: rgba(154,179,150,0.3); }
+        .menu-item span { font-size: 20px; }
+        
+        .main-content { margin-left: 280px; flex: 1; padding: 40px; }
+        .header {
+            background: white; padding: 30px;
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px;
+        }
+        .header h1 { font-size: 28px; color: #5A6B4D; font-weight: 300; display: flex; align-items: center; gap: 12px; }
+        .btn-primary {
+            padding: 15px 30px; background: #9AB396;
+            color: white; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 13px; font-weight: 500;
+            letter-spacing: 1px; transition: all 0.3s;
+            font-family: 'Georgia', serif; text-transform: uppercase;
+        }
+        .btn-primary:hover { background: #7F9B7A; transform: translateY(-2px); }
+        
+        .table-container {
+            background: white; border-radius: 12px;
+            overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .table-header {
+            background: #F5F0EB; padding: 20px;
+            font-size: 13px; color: #5A6B4D; font-weight: 600;
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            background: #F5F0EB; padding: 20px;
+            text-align: left; font-size: 13px; color: #5A6B4D;
+            letter-spacing: 1px; font-weight: 600; text-transform: uppercase;
+        }
+        td { padding: 20px; border-bottom: 1px solid #F5F0EB; }
+        tr:hover { background: #FEFDFB; }
+        .btn-small {
+            padding: 8px 16px; border: none; border-radius: 6px;
+            cursor: pointer; font-size: 11px; margin-right: 8px;
+            font-family: 'Georgia', serif; letter-spacing: 1px;
+        }
+        .btn-details { background: #9AB396; color: white; }
+        .btn-edit { background: #F4B400; color: white; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-small:hover { opacity: 0.9; transform: translateY(-1px); }
+    </style>
 </head>
 <body>
+  <!-- 🔥 NAVBAR HAUT (FIXE) -->
+<nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #5A6B4D; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <div style="color: white; font-size: 24px; font-weight: bold; font-family: 'Georgia', serif;">
+        💍 GOLDEN PROMISE
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <!-- Langues -->
+        <select style="padding: 8px 12px; border: none; border-radius: 6px; background: rgba(255,255,255,0.1); color: white;">
+            <option>🇫🇷 FR</option>
+            <option>🇲🇦 AR</option>
+            <option>🇺🇸 EN</option>
+        </select>
+        <!-- Déconnexion -->
+        <button onclick="logout()" style="background: #dc3545; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 500;">
+            🚪 Déconnexion
+        </button>
+    </div>
+</nav>
 
-<h1>Clients</h1>
+    <!-- SIDEBAR IDENTIQUE -->
+    <aside class="sidebar">
+        <div class="logo-section">
+            <h2>GOLDEN PROMISE</h2>
+        </div>
+        <div class="menu-item" onclick="window.location.href='dashboard.html'">
+            <span>📊</span><span>Dashboard</span>
+        </div>
+        <div class="menu-item active">
+            <span>👥</span><span>Clients</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='weddings.html'">
+            <span>💒</span><span>Mariages</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='vendors.html'">
+            <span>🏢</span><span>Prestataires</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='services.html'">
+            <span>⚙️</span><span>Services</span>
+        </div>
+        <div class="menu-item" onclick="window.location.href='payments.html'">
+            <span>💰</span><span>Paiements</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <span>🚪</span><span>Déconnexion</span>
+        </div>
+    </aside>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nom</th>
-      <th>Email</th>
-      <!-- colonne Actions supprimée -->
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Les lignes seront ajoutées par JavaScript -->
-  </tbody>
-</table>
+    <main class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-users"></i> Gestion Clients</h1>
+            <button class="btn-primary" onclick="openModal()">+ Nouveau Client</button>
+        </div>
 
-<script src="../assets/js/api.js"></script>
-<script src="../assets/js/crud.js"></script>
+        <div class="table-container">
+            <div class="table-header">
+                <i class="fas fa-list"></i> Liste Clients 
+                <span style="float:right; font-size:12px; color:#9B8B7E;">Total: <span id="totalClients">0</span></span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Mariage</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientsTable">
+                    <!-- ✅ DONNÉES INTÉGRÉES -->
+                </tbody>
+            </table>
+        </div>
+    </main>
 
+    <!-- ✅ DONNÉES + JS INTÉGRÉS -->
+    <script>
+        // 🔐 AUTH
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'index.html';
+        }
+
+        // ✅ DONNÉES CLIENTS INTÉGRÉES (AUCUN FICHIER EXTERN)
+        const CLIENTS = [
+            { id: 1, first_name: "Sarah", last_name: "Ahmed", email: "sarah@email.com", phone: "+212600123456", weddingDate: "2026-06-15" },
+            { id: 2, first_name: "Fatima", last_name: "Karim", email: "fatima@email.com", phone: "+212600234567", weddingDate: "2026-08-20" },
+            { id: 3, first_name: "Leila", last_name: "Youssef", email: "leila@email.com", phone: "+212600345678", weddingDate: "2026-09-10" }
+        ];
+
+        // 🔥 BOUTON DÉTAILS FONCTIONNEL
+        function goToClientDetails(index) {
+            localStorage.setItem('clientIndex', index);
+            window.location.href = 'details.html';
+        }
+
+        // 📊 AFFICHER TABLEAU
+        function displayClients() {
+            const tbody = document.getElementById('clientsTable');
+            const totalSpan = document.getElementById('totalClients');
+            
+            tbody.innerHTML = CLIENTS.map(client => `
+                <tr>
+                    <td><strong>#${client.id.toString().padStart(2,'0')}</strong></td>
+                    <td><strong>${client.first_name} ${client.last_name}</strong></td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${new Date(client.weddingDate).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <button class="btn-small btn-details" onclick="goToClientDetails(${CLIENTS.indexOf(client)})">
+                            <i class="fas fa-eye"></i> Voir
+                        </button>
+                        <button class="btn-small btn-edit">✏️</button>
+                        <button class="btn-small btn-delete">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            totalSpan.textContent = CLIENTS.length;
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function openModal() {
+            alert('Fonctionnalité en développement');
+        }
+
+        // 🚀 LANCE AU CHARGEMENT
+        window.onload = displayClients;
+    </script>
 </body>
 </html>
+

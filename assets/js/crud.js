@@ -1,21 +1,11 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const clients = await getClients(); // récupère les clients depuis l'API
-  const tbody = document.querySelector("tbody");
-
-  if (!tbody) return;
-
-  clients.forEach(client => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${client.id}</td>
-      <td>${client.first_name} ${client.last_name}</td>
-      <td>${client.email}</td>
-      <!-- Actions supprimées -->
-    `;
-
-    tbody.appendChild(row);
-  });
+// CRUD générique pour toutes les pages
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion modals CRUD
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+    });
 });
-
 

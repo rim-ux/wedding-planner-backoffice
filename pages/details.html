@@ -1,198 +1,246 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Détails - Wedding Planner</title>
-
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
-      display: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      height: 100vh;
-      position: fixed;
-      color: white;
-      padding: 20px;
-    }
-    .logo { font-size: 32px; text-align: center; }
-    .logo-text { font-size: 20px; font-weight: 600; text-align: center; margin-bottom: 40px; }
-    .menu-item {
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .menu-item:hover { background: rgba(255,255,255,0.2); }
-    .logout {
-      position: absolute;
-      bottom: 20px;
-      width: calc(100% - 40px);
-      padding: 15px;
-      background: rgba(255,0,0,0.3);
-      border-radius: 10px;
-      text-align: center;
-      cursor: pointer;
-    }
-    .main-content {
-      margin-left: 250px;
-      padding: 30px;
-      width: calc(100% - 250px);
-    }
-    .header h1 { font-size: 32px; margin-bottom: 10px; }
-    .details-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .detail-card {
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-    .detail-card h2 {
-      margin-bottom: 20px;
-      border-bottom: 2px solid #667eea;
-      padding-bottom: 10px;
-    }
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .detail-row:last-child { border-bottom: none; }
-    .status-badge {
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: #d1fae5;
-      color: #065f46;
-      font-weight: bold;
-    }
-    .action-buttons {
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-    }
-    .btn {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Client - Golden Promise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Georgia', serif; 
+            background: #F5F0EB; 
+            color: #2B3A2F;
+            margin-top: 120px;
+        }
+        
+        /* NAVBAR */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: #5A6B4D; padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        nav .logo { color: white; font-size: 24px; font-weight: bold; }
+        nav select, nav button { 
+            padding: 8px 12px; border: none; border-radius: 6px; 
+            background: rgba(255,255,255,0.1); color: white; cursor: pointer;
+        }
+        nav button { background: #dc3545; padding: 12px 24px; font-weight: 500; }
+        
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px; background: #5A6B4D; height: 100vh; position: fixed;
+            color: white; padding: 80px 0 30px; /* 80px pour navbar */
+        }
+        .logo-section { padding: 0 30px 30px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .logo-section h2 { font-size: 20px; color: #9AB396; letter-spacing: 2px; text-transform: uppercase; }
+        .menu-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px 20px;
+            color: #E5DED5; border-radius: 8px; margin-bottom: 5px; cursor: pointer;
+            font-size: 14px; transition: all 0.3s;
+        }
+        .menu-item:hover { background: rgba(154,179,150,0.2); color: white; }
+        .menu-item.active { background: rgba(154,179,150,0.3); }
+        
+        .main-content { margin-left: 280px; padding: 40px; }
+        
+        .client-header {
+            background: white; padding: 40px; border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .client-header h1 { 
+            font-size: 32px; color: #5A6B4D; font-weight: 300;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .btn-primary {
+            padding: 15px 30px; background: #9AB396; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 500; font-family: 'Georgia', serif;
+        }
+        .btn-primary:hover { background: #7F9B7A; transform: translateY(-2px); }
+        .btn-secondary {
+            padding: 15px 30px; background: #9B8B7E; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 500; text-decoration: none;
+            display: inline-block; margin-top: 20px;
+        }
+        
+        .details-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;
+        }
+        .detail-card {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .detail-card h3 { 
+            color: #5A6B4D; margin-bottom: 25px; font-size: 20px;
+            border-bottom: 2px solid #9AB396; padding-bottom: 10px;
+        }
+        .detail-item {
+            display: flex; justify-content: space-between; padding: 15px 0;
+            border-bottom: 1px solid #F5F0EB; font-size: 16px;
+        }
+        .detail-item:last-child { border-bottom: none; }
+        .detail-value { font-weight: 600; color: #5A6B4D; }
+        
+        .payments-table {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow-x: auto;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #F5F0EB; padding: 15px; text-align: left; font-weight: 600; }
+        td { padding: 15px; border-bottom: 1px solid #F5F0EB; }
+    </style>
 </head>
-
 <body>
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="logo">💍</div>
-    <div class="logo-text">Wedding Planner</div>
-
-    <div class="menu-item" onclick="window.location.href='../dashboard.html'">📊 Dashboard</div>
-    <div class="menu-item" onclick="window.location.href='clients.html'">👥 Clients</div>
-    <div class="menu-item" onclick="window.location.href='weddings.html'">💒 Mariages</div>
-    <div class="menu-item" onclick="window.location.href='vendors.html'">🏢 Prestataires</div>
-    <div class="menu-item" onclick="window.location.href='services.html'">⚙️ Services</div>
-    <div class="menu-item" onclick="window.location.href='payments.html'">💰 Paiements</div>
-
-    <div class="logout" onclick="logout()">🚪 Déconnexion</div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main-content">
-    <div class="header">
-      <h1>📋 Détails du Client</h1>
-    </div>
-
-    <div class="details-container">
-      <div class="detail-card">
-        <h2>👤 Informations Client</h2>
-        <div class="detail-row">
-          <span>ID</span>
-          <span id="client-id"></span>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">💍 GOLDEN PROMISE</div>
+        <div>
+            <select><option>🇫🇷 FR</option><option>🇲🇦 AR</option><option>🇺🇸 EN</option></select>
+            <button onclick="logout()">🚪 Déconnexion</button>
         </div>
-        <div class="detail-row">
-          <span>Nom</span>
-          <span id="client-name"></span>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-section"><h2>GOLDEN PROMISE</h2></div>
+        <div class="menu-item" onclick="window.location.href='dashboard.html'"><span>📊</span><span>Dashboard</span></div>
+        <div class="menu-item active"><span>👥</span><span>Clients</span></div>
+        <div class="menu-item" onclick="window.location.href='weddings.html'"><span>💒</span><span>Mariages</span></div>
+        <div class="menu-item" onclick="window.location.href='vendors.html'"><span>🏢</span><span>Prestataires</span></div>
+        <div class="menu-item" onclick="window.location.href='services.html'"><span>⚙️</span><span>Services</span></div>
+        <div class="menu-item" onclick="window.location.href='payments.html'"><span>💰</span><span>Paiements</span></div>
+    </aside>
+
+    <main class="main-content">
+        <div class="client-header">
+            <h1><i class="fas fa-user"></i> <span id="clientFullName">Sarah Ahmed</span></h1>
+            <button class="btn-primary" onclick="exportPDF()">
+                <i class="fas fa-file-pdf"></i> Exporter PDF
+            </button>
         </div>
-        <div class="detail-row">
-          <span>Email</span>
-          <span id="client-email"></span>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3>Informations Personnelles</h3>
+                <div class="detail-item">
+                    <span>Email:</span>
+                    <span class="detail-value" id="clientEmail">sarah@email.com</span>
+                </div>
+                <div class="detail-item">
+                    <span>Téléphone:</span>
+                    <span class="detail-value" id="clientPhone">+212 600 123 456</span>
+                </div>
+                <div class="detail-item">
+                    <span>Date Mariage:</span>
+                    <span class="detail-value" id="weddingDate">15 Juin 2026</span>
+                </div>
+                <div class="detail-item">
+                    <span>Budget:</span>
+                    <span class="detail-value" id="budget">25,000€</span>
+                </div>
+                <div class="detail-item">
+                    <span>Statut:</span>
+                    <span class="detail-value" id="status">Actif</span>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <h3>Services Souscrits</h3>
+                <div class="detail-item">
+                    <span>Organisation complète:</span>
+                    <span class="detail-value">✓ 8,000€</span>
+                </div>
+                <div class="detail-item">
+                    <span>Coordination Jour J:</span>
+                    <span class="detail-value">✓ 2,500€</span>
+                </div>
+                <div class="detail-item">
+                    <span>Photographe:</span>
+                    <span class="detail-value">Photo Pro Studio</span>
+                </div>
+                <div class="detail-item">
+                    <span>Total Services:</span>
+                    <span class="detail-value">10,500€</span>
+                </div>
+            </div>
         </div>
-        <div class="detail-row">
-          <span>Statut</span>
-          <span class="status-badge">Actif</span>
+
+        <div class="payments-table">
+            <h3 style="color: #5A6B4D; margin-bottom: 20px;">Historique Paiements</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Méthode</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsTable">
+                    <tr>
+                        <td>15/01/2026</td>
+                        <td style="color: #10b981; font-weight: bold;">5,000€</td>
+                        <td>Virement</td>
+                        <td style="background: #10b981; color: white; padding: 4px 8px; border-radius: 12px;">Validé</td>
+                    </tr>
+                    <tr>
+                        <td>20/01/2026</td>
+                        <td style="color: #F4B400; font-weight: bold;">2,500€</td>
+                        <td>Carte</td>
+                        <td style="background: #F4B400; color: white; padding: 4px 8px; border-radius: 12px;">En attente</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
 
-      <div class="detail-card">
-        <h2>📞 Contact</h2>
-        <div class="detail-row">
-          <span>Téléphone</span>
-          <span>+212 600 000 000</span>
-        </div>
-        <div class="detail-row">
-          <span>Ville</span>
-          <span>Maroc</span>
-        </div>
-      </div>
-    </div>
+        <a href="clients.html" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour Clients
+        </a>
+    </main>
 
-    <div class="action-buttons">
-      <button class="btn btn-primary" onclick="window.location.href='clients.html'">
-        ← Retour
-      </button>
-      <button class="btn btn-secondary">📄 Export PDF</button>
-    </div>
-  </div>
+    <script>
+        // 🔐 AUTH
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'index.html';
+        }
 
-  <!-- AUTH -->
-  <script>
-    if (!localStorage.getItem("isLoggedIn")) {
-      window.location.href = "../index.html";
-    }
-    function logout() {
-      localStorage.clear();
-      window.location.href = "../index.html";
-    }
-  </script>
+        // 🚪 LOGOUT
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
 
-  <!-- API + DETAILS SCRIPT -->
-  <script src="../assets/js/api.js"></script>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const clientId = params.get("id");
-
-    async function loadClientDetails() {
-      const clients = await getClients();
-      const client = clients.find(c => c.id == clientId);
-      if (!client) return;
-
-      document.getElementById("client-id").textContent = "#" + client.id;
-      document.getElementById("client-name").textContent =
-        client.first_name + " " + client.last_name;
-      document.getElementById("client-email").textContent = client.email;
-    }
-
-    loadClientDetails();
-  </script>
-
+        // 📄 EXPORT PDF
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Logo/Titre
+            doc.setFontSize(20);
+            doc.text('GOLDEN PROMISE - Fiche Client', 20, 20);
+            
+            // Données client
+            doc.setFontSize(12);
+            doc.text(`Nom: ${document.getElementById('clientFullName').textContent}`, 20, 40);
+            doc.text(`Email: ${document.getElementById('clientEmail').textContent}`, 20, 50);
+            doc.text(`Téléphone: ${document.getElementById('clientPhone').textContent}`, 20, 60);
+            doc.text(`Date mariage: ${document.getElementById('weddingDate').textContent}`, 20, 70);
+            doc.text(`Budget: ${document.getElementById('budget').textContent}`, 20, 80);
+            
+            // Services
+            doc.text('Services:', 20, 100);
+            doc.text('• Organisation complète: 8,000€', 30, 110);
+            doc.text('• Coordination Jour J: 2,500€', 30, 120);
+            
+            // Sauvegarde
+            doc.save('golden-promise-client-details.pdf');
+        }
+    </script>
 </body>
 </html>
+
+

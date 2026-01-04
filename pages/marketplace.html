@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Golden Promise Wedding Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #FFFFF0;
+            color: #2C5F2D;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 240, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(212, 175, 55, 0.15);
+            border-bottom: 1px solid #9AB396;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 400;
+            color: #9AB396;
+            letter-spacing: 2px;
+            text-transform: capitalize;
+            font-family: 'Georgia', serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #9B8B7E;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #9AB396;
+        }
+
+        .btn-cart {
+            padding: 10px 30px;
+            background: #9AB396;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .btn-cart .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #5A6B4D;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .btn-cart:hover {
+            background: #7F9B7A;
+        }
+
+        /* WELCOME BANNER */
+        .welcome-banner {
+            background: linear-gradient(135deg, #9AB396 0%, #A8B89F 100%);
+            color: white;
+            padding: 25px 80px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .welcome-banner h2 {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* HERO SECTION */
+        .hero-marketplace {
+            padding: 100px 80px 60px;
+            background: linear-gradient(135deg, #F5EFE0 0%, #FFFFF0 100%);
+            text-align: center;
+        }
+
+        .hero-marketplace h1 {
+            font-size: 52px;
+            color: #5A6B4D;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero-marketplace p {
+            font-size: 18px;
+            color: #9B8B7E;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        /* FILTER SECTION */
+        .filter-section {
+            padding: 40px 80px;
+            background: white;
+            border-bottom: 1px solid #E5DED5;
+        }
+
+        .filter-title {
+            font-size: 13px;
+            color: #9B8B7E;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 28px;
+            background: #F5EFE0;
+            color: #5A6B4D;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #9AB396;
+            color: white;
+            border-color: #7F9B7A;
+        }
+
+        /* SERVICES GRID */
+        .services-container {
+            padding: 60px 80px 100px;
+            background: #FFFFF0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* SERVICE CARD */
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(154, 179, 150, 0.15);
+            transition: all 0.3s;
+            border: 1px solid #E5DED5;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(154, 179, 150, 0.25);
+            border-color: #9AB396;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .service-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #9AB396;
+            color: white;
+            padding: 6px 15px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .service-content {
+            padding: 25px;
+        }
+
+        .service-category {
+            font-size: 11px;
+            color: #9AB396;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .service-title {
+            font-size: 22px;
+            color: #5A6B4D;
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .service-desc {
+            color: #9B8B7E;
+            line-height: 1.7;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .service-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #F5EFE0;
+        }
+
+        .service-price {
+            font-size: 28px;
+            color: #9AB396;
+            font-weight: 300;
+        }
+
+        .service-price span {
+            font-size: 14px;
+            color: #9B8B7E;
+        }
+
+        .btn-add-cart {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #9AB396 0%, #7F9B7A 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .btn-add-cart:hover {
+            background: linear-gradient(135deg, #7F9B7A 0%, #5A6B4D 100%);
+            box-shadow: 0 5px 15px rgba(154, 179, 150, 0.3);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #5A6B4D;
+            color: #E5DED5;
+            padding: 60px 80px 30px;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .hero-marketplace, .filter-section, .services-container, .footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .hero-marketplace h1 {
+                font-size: 36px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">Golden Promise</div>
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="marketplace.html">SERVICES</a>
+            <a href="dashboard.html">DASHBOARD</a>
+            <a href="#customize">CUSTOMIZE</a>
+            <a href="#bookings">MY BOOKINGS</a>
+            <button class="btn-cart" onclick="goToCart()">
+                CART
+                <span class="badge" id="cartBadge">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- WELCOME BANNER -->
+    <div class="welcome-banner">
+        <h2>Welcome back, <span id="userNameDisplay">Guest</span>! 🌿 Find your perfect wedding services below.</h2>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-marketplace">
+        <h1>Discover Your Perfect<br>Wedding Services</h1>
+        <p>Browse through our curated collection of trusted vendors and find everything you need for your dream wedding</p>
+    </section>
+
+    <!-- FILTER SECTION -->
+    <section class="filter-section">
+        <h3 class="filter-title">FILTER BY CATEGORY</h3>
+        <div class="filter-buttons">
+            <button class="filter-btn active">ALL SERVICES</button>
+            <button class="filter-btn">CATERING</button>
+            <button class="filter-btn">MUSIC & DJ</button>
+            <button class="filter-btn">PHOTOGRAPHY</button>
+            <button class="filter-btn">FLORISTRY</button>
+            <button class="filter-btn">BRIDAL GOWNS</button>
+            <button class="filter-btn">CAKES</button>
+        </div>
+    </section>
+
+    <!-- SERVICES GRID -->
+    <section class="services-container">
+        <div class="services-grid">
+            <!-- CATERING 1 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('assets/img/buffet.jpg');">
+                    <span class="service-badge">POPULAR</span>
+                </div>
+                <div class="service-content">
+                    <div class="service-category">CATERING</div>
+                    <h3 class="service-title">Gourmet Wedding Buffet</h3>
+                    <p class="service-desc">Exquisite 5-course menu with international cuisine and personalized service</p>
+                    <div class="service-footer">
+                        <div class="service-price">$2,500<span>/event</span></div>
+                        <button class="btn-add-cart">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHOTOGRAPHY -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('assets/img/photographe.jpg');"></div>
+                <div class="service-content">
+                    <div class="service-category">PHOTOGRAPHY</div>
+                    <h3 class="service-title">Professional Photo Package</h3>
+                    <p class="service-desc">Full-day coverage with 2 photographers, edited photos, and photo album</p>
+                    <div class="service-footer">
+                        <div class="service-price">$1,800<span>/day</span></div>
+                        <button class="btn-add-cart">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MUSIC & DJ -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('assets/img/danse.jpg');">
+                    <span class="service-badge">NEW</span>
+                </div>
+                <div class="service-content">
+                    <div class="service-category">MUSIC & DJ</div>
+                    <h3 class="service-title">Live Band + DJ Package</h3>
+                    <p class="service-desc">4-hour live music performance followed by DJ entertainment</p>
+                    <div class="service-footer">
+                        <div class="service-price">$3,200<span>/event</span></div>
+                        <button class="btn-add-cart">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FLORISTRY -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('assets/img/floral-design.jpg');"></div>
+                <div class="service-content">
+                    <div class="service-category">FLORISTRY</div>
+                    <h3 class="service-title">Premium Floral Design</h3>
+                    <p class="service-desc">Custom arrangements with roses, peonies, and seasonal flowers</p>
+                    <div class="service-footer">
+                        <div class="service-price">$1,500<span>/setup</span></div>
+                        <button class="btn-add-cart">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRIDAL GOWNS -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('assets/img/bridal-gowns.jpg');">
+                    <span class="service-badge">EXCLUSIVE</span>
+                </div>
+                <div class="service-content">
+                    <div class="service-category">BRIDAL GOWNS</div>
+                    <h3 class="service-title">Designer Wedding Dress</h3>
+                    <p class="service-desc">Handcrafted lace gown with custom fitting and alterations included</p>
+                    <div class="service-footer">
+                        <div class="service-price">$4,500<span>/dress</span></div>
+                        <button class="btn-add-cart">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEDDING CAKE -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('assets/img/wedding-cake.jpg');"></div>
+                <div class="service-content">
+                    <div class="service-category">CAKES</div>
+                    <h3 class="service-title">5-Tier Wedding Cake</h3>
+                    <p class="service-desc">Custom-designed cake with premium ingredients and delivery</p>
+                    <div class="service-footer">
+                        <div class="service-price">$850<span>/cake</span></div>
+                        <button class="btn-add-cart">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2026 Golden Promise Wedding Planner. All Rights Reserved.</p>
+    </footer>
+
+   <script>
+    // Afficher le nom de l'utilisateur (optionnel, ne redirige pas si absent)
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+        const firstName = userName.split(' ')[0];
+        document.getElementById('userNameDisplay').textContent = firstName;
+    } else {
+        document.getElementById('userNameDisplay').textContent = 'Guest';
+    }
+
+    // Récupérer le panier depuis localStorage
+    let cartCount = parseInt(localStorage.getItem('cartCount')) || 0;
+    document.getElementById('cartBadge').textContent = cartCount;
+
+    // FILTER FUNCTIONALITY
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+
+    // ADD TO CART
+    const cartBtns = document.querySelectorAll('.btn-add-cart');
+
+    cartBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            cartCount++;
+            document.getElementById('cartBadge').textContent = cartCount;
+            localStorage.setItem('cartCount', cartCount);
+            
+            btn.textContent = '✓ ADDED';
+            btn.style.background = '#5A6B4D';
+            
+            setTimeout(() => {
+                btn.textContent = 'ADD TO CART';
+                btn.style.background = '';
+            }, 2000);
+        });
+    });
+
+    // Fonction pour le bouton CART
+    function goToCart() {
+        if (cartCount === 0) {
+            alert('Your cart is empty. Add some services first!');
+        } else {
+            alert(`You have ${cartCount} items in your cart`);
+            // window.location.href = 'cart.html';
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiements - Wedding Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            position: fixed;
+            color: white;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 20px;
+            width: calc(100% - 40px);
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+        }
+
+        .btn-add {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            color: #333;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-edit {
+            padding: 8px 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .btn-delete {
+            padding: 8px 15px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .modal-header {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-paye {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-attente {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-retard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">💍</div>
+        <div class="logo-text">Wedding Planner</div>
+        
+        <div class="menu-item" onclick="window.location.href='../dashboard.html'">
+            📊 Dashboard
+        </div>
+        <div class="menu-item" onclick="window.location.href='clients.html'">
+            👥 Clients
+        </div>
+        <div class="menu-item" onclick="window.location.href='weddings.html'">
+            💒 Mariages
+        </div>
+        <div class="menu-item" onclick="window.location.href='vendors.html'">
+            🏢 Prestataires
+        </div>
+        <div class="menu-item" onclick="window.location.href='services.html'">
+            ⚙️ Services
+        </div>
+        <div class="menu-item active" onclick="window.location.href='payments.html'">
+            💰 Paiements
+        </div>
+        
+        <div class="logout" onclick="logout()">
+            🚪 Déconnexion
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>💰 Gestion des Paiements</h1>
+            <button class="btn-add" onclick="openModal()">+ Ajouter un paiement</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Montant (DH)</th>
+                        <th>Date</th>
+                        <th>Méthode</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <h2 class="modal-header" id="modalTitle">Ajouter un paiement</h2>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label>Client</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Montant (DH)</label>
+                    <input type="number" id="amount" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="paymentDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Méthode de paiement</label>
+                    <select id="method" required>
+                        <option value="">Choisir une méthode</option>
+                        <option value="Espèces">Espèces</option>
+                        <option value="Chèque">Chèque</option>
+                        <option value="Virement">Virement bancaire</option>
+                        <option value="Carte">Carte bancaire</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Statut</label>
+                    <select id="status" required>
+                        <option value="Payé">Payé</option>
+                        <option value="En attente">En attente</option>
+                        <option value="En retard">En retard</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-save">Enregistrer</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = '../index.html';
+        }
+
+        let payments = [
+            { id: 1, client: 'Sarah & Ahmed', amount: 50000, date: '2026-01-02', method: 'Virement', status: 'Payé' },
+            { id: 2, client: 'Fatima & Karim', amount: 75000, date: '2026-01-03', method: 'Chèque', status: 'Payé' },
+            { id: 3, client: 'Leila & Youssef', amount: 30000, date: '2026-01-05', method: 'Espèces', status: 'En attente' },
+            { id: 4, client: 'Meryem & Omar', amount: 45000, date: '2025-12-28', method: 'Carte', status: 'En retard' }
+        ];
+
+        let editingId = null;
+
+        function displayPayments() {
+            const tbody = document.getElementById('paymentsTable');
+            tbody.innerHTML = '';
+            
+            payments.forEach(payment => {
+                const statusClass = payment.status === 'Payé' ? 'status-paye' : 
+                                   payment.status === 'En retard' ? 'status-retard' : 'status-attente';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${payment.id}</td>
+                        <td>${payment.client}</td>
+                        <td>${payment.amount.toLocaleString()}</td>
+                        <td>${payment.date}</td>
+                        <td>${payment.method}</td>
+                        <td><span class="status-badge ${statusClass}">${payment.status}</span></td>
+                        <td>
+                            <button class="btn-edit" onclick="editPayment(${payment.id})">✏️ Modifier</button>
+                            <button class="btn-delete" onclick="deletePayment(${payment.id})">🗑️ Supprimer</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openModal() {
+            document.getElementById('paymentModal').style.display = 'flex';
+            document.getElementById('modalTitle').textContent = 'Ajouter un paiement';
+            document.getElementById('paymentForm').reset();
+            editingId = null;
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const client = document.getElementById('clientName').value;
+            const amount = parseInt(document.getElementById('amount').value);
+            const date = document.getElementById('paymentDate').value;
+            const method = document.getElementById('method').value;
+            const status = document.getElementById('status').value;
+            
+            if (editingId) {
+                const payment = payments.find(p => p.id === editingId);
+                payment.client = client;
+                payment.amount = amount;
+                payment.date = date;
+                payment.method = method;
+                payment.status = status;
+            } else {
+                const newPayment = {
+                    id: payments.length + 1,
+                    client, amount, date, method, status
+                };
+                payments.push(newPayment);
+            }
+            
+            displayPayments();
+            closeModal();
+        });
+
+        function editPayment(id) {
+            const payment = payments.find(p => p.id === id);
+            document.getElementById('clientName').value = payment.client;
+            document.getElementById('amount').value = payment.amount;
+            document.getElementById('paymentDate').value = payment.date;
+            document.getElementById('method').value = payment.method;
+            document.getElementById('status').value = payment.status;
+            document.getElementById('modalTitle').textContent = 'Modifier le paiement';
+            document.getElementById('paymentModal').style.display = 'flex';
+            editingId = id;
+        }
+
+        function deletePayment(id) {
+            if (confirm('Voulez-vous vraiment supprimer ce paiement ?')) {
+                payments = payments.filter(p => p.id !== id);
+                displayPayments();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = '../index.html';
+        }
+
+        displayPayments();
+    </script>
+</body>
+</html>
+ 

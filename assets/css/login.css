@@ -1,0 +1,48 @@
+/* Form Error Messages */
+.form-error {
+    display: none;
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 4px;
+    margin-left: 4px;
+}
+
+/* Toggle Password Button */
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: var(--sage);
+}
+
+/* Loading State */
+.loader {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Form Input States */
+.form-input.error {
+    border-color: var(--danger);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.form-input.success {
+    border-color: var(--success);
+}

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Services | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .client-info {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .client-info h3 {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 5px;
+        }
+        .client-info p {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(197, 160, 89, 0.2);
+        }
+        .service-header {
+            background: linear-gradient(135deg, var(--rose-gold), #a68847);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .service-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.3;
+        }
+        .service-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .service-body {
+            padding: 30px;
+        }
+        .service-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .service-label {
+            font-size: 0.85rem;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .service-value {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .status-confirme {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+        .status-attente {
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+        }
+        
+        .service-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-modify {
+            flex: 1;
+            padding: 12px 20px;
+            background: var(--rose-gold);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-modify:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .btn-delete {
+            padding: 12px 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.3s;
+        }
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 42, 38, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 0;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease;
+            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--rose-gold), #a68847);
+            color: white;
+            padding: 35px 40px;
+            text-align: center;
+        }
+
+        .modal-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .modal-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            color: var(--rose-gold);
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid rgba(197, 160, 89, 0.15);
+            border-radius: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: var(--silk);
+        }
+
+        .form-input:focus {
+            border-color: var(--rose-gold);
+            background: white;
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            padding: 0 40px 40px 40px;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--rose-gold), #a68847);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.4);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 18px;
+            background: transparent;
+            color: var(--text);
+            border: 2px solid rgba(197, 160, 89, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(197, 160, 89, 0.1);
+            border-color: var(--rose-gold);
+        }
+        
+        /* RTL Support */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
+            </select>
+        </div>
+        
+        <div class="client-info">
+            <h3 id="clientName"></h3>
+            <p id="weddingDate"></p>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="client-dashboard.html" class="menu-link">
+                    <i class="fas fa-home"></i> 
+                    <span data-i18n="home">Accueil</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-services.html" class="menu-link active">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="my_services">Mes Services</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-planning.html" class="menu-link">
+                    <i class="fas fa-calendar"></i> 
+                    <span data-i18n="planning">Planning</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-paiements.html" class="menu-link">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="payments">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-messages.html" class="menu-link">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+        </ul>
+        <li class="menu-item">
+    <a href="client-profil.html" class="menu-link">
+        <i class="fas fa-user-circle"></i> 
+        <span data-i18n="my_profile">Mon Profil</span>
+    </a>
+</li>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 data-i18n="services_title">Mes Services Réservés</h1>
+            <p data-i18n="services_subtitle">Gérez vos prestataires et services</p>
+        </header>
+
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services dynamiques -->
+        </div>
+    </div>
+
+    <!-- MODAL DE MODIFICATION -->
+    <div class="modal-overlay" id="modalModify">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="modal_title">✨ Changer de prestataire</h2>
+                <p data-i18n="modal_subtitle">Sélectionnez un nouveau prestataire pour ce service</p>
+            </div>
+            <form id="modifyForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-tag"></i> <span data-i18n="service_type">Type de service</span>
+                        </label>
+                        <input type="text" class="form-input" id="inputType" readonly style="background: #f5f5f5; cursor: not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-building"></i> <span data-i18n="new_vendor">Nouveau prestataire</span>
+                        </label>
+                        <select class="form-input" id="selectPrestataire" required>
+                            <option value="" data-i18n="choose_vendor">-- Choisissez un prestataire --</option>
+                        </select>
+                    </div>
+                    <div id="prestataireInfo" style="margin-top: 20px; padding: 20px; background: var(--silk); border-radius: 15px; display: none;">
+                        <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;"><strong data-i18n="info">Informations :</strong></p>
+                        <p style="margin-bottom: 8px;"><strong data-i18n="rate">Tarif :</strong> <span id="infoTarif"></span></p>
+                        <p><strong data-i18n="contact">Contact :</strong> <span id="infoContact"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-check-circle"></i> <span data-i18n="confirm">Confirmer</span>
+                    </button>
+                    <button type="button" class="btn-cancel" onclick="closeModal()">
+                        <span data-i18n="cancel">Annuler</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'fr';
+        
+        const t = {
+            fr: {
+                home: "Accueil",
+                my_services: "Mes Services",
+                planning: "Planning",
+                payments: "Paiements",
+                messages: "Messages",
+                logout: "Déconnexion",
+                services_title: "Mes Services Réservés",
+                services_subtitle: "Gérez vos prestataires et services",
+                type: "Type",
+                rate: "Tarif",
+                contact: "Contact",
+                confirmed: "Confirmé",
+                pending: "En attente",
+                change: "Changer",
+                modal_title: "✨ Changer de prestataire",
+                modal_subtitle: "Sélectionnez un nouveau prestataire pour ce service",
+                service_type: "Type de service",
+                new_vendor: "Nouveau prestataire",
+                choose_vendor: "-- Choisissez un prestataire --",
+                info: "Informations :",
+                confirm: "Confirmer",
+                cancel: "Annuler",
+                wedding_on: "Mariage le",
+                delete_confirm: "Êtes-vous sûr de vouloir supprimer",
+                delete_warning: "Cette action est irréversible.",
+                delete_success: "✅ Service supprimé avec succès !",
+                select_vendor_warning: "⚠️ Veuillez sélectionner un prestataire",
+                change_success: "✅ Prestataire changé avec succès !\n\nLe nouveau prestataire sera contacté pour confirmation."
+            },
+            en: {
+                home: "Home",
+                my_services: "My Services",
+                planning: "Planning",
+                payments: "Payments",
+                messages: "Messages",
+                logout: "Logout",
+                services_title: "My Booked Services",
+                services_subtitle: "Manage your vendors and services",
+                type: "Type",
+                rate: "Rate",
+                contact: "Contact",
+                confirmed: "Confirmed",
+                pending: "Pending",
+                change: "Change",
+                modal_title: "✨ Change vendor",
+                modal_subtitle: "Select a new vendor for this service",
+                service_type: "Service type",
+                new_vendor: "New vendor",
+                choose_vendor: "-- Choose a vendor --",
+                info: "Information:",
+                confirm: "Confirm",
+                cancel: "Cancel",
+                wedding_on: "Wedding on",
+                delete_confirm: "Are you sure you want to delete",
+                delete_warning: "This action is irreversible.",
+                delete_success: "✅ Service deleted successfully!",
+                select_vendor_warning: "⚠️ Please select a vendor",
+                change_success: "✅ Vendor changed successfully!\n\nThe new vendor will be contacted for confirmation."
+            },
+            ar: {
+                home: "الرئيسية",
+                my_services: "خدماتي",
+                planning: "التخطيط",
+                payments: "المدفوعات",
+                messages: "الرسائل",
+                logout: "تسجيل الخروج",
+                services_title: "خدماتي المحجوزة",
+                services_subtitle: "إدارة مقدمي الخدمات والخدمات",
+                type: "النوع",
+                rate: "السعر",
+                contact: "الاتصال",
+                confirmed: "مؤكد",
+                pending: "قيد الانتظار",
+                change: "تغيير",
+                modal_title: "✨ تغيير مقدم الخدمة",
+                modal_subtitle: "اختر مقدم خدمة جديد لهذه الخدمة",
+                service_type: "نوع الخدمة",
+                new_vendor: "مقدم خدمة جديد",
+                choose_vendor: "-- اختر مقدم خدمة --",
+                info: "معلومات:",
+                confirm: "تأكيد",
+                cancel: "إلغاء",
+                wedding_on: "الزفاف في",
+                delete_confirm: "هل أنت متأكد من حذف",
+                delete_warning: "هذا الإجراء لا يمكن التراجع عنه.",
+                delete_success: "✅ تم حذف الخدمة بنجاح!",
+                select_vendor_warning: "⚠️ يرجى اختيار مقدم خدمة",
+                change_success: "✅ تم تغيير مقدم الخدمة بنجاح!\n\nسيتم الاتصال بمقدم الخدمة الجديد للتأكيد."
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang] && t[lang][key]) {
+                    el.textContent = t[lang][key];
+                }
+            });
+            
+            updateWeddingDate();
+            renderServices();
+        }
+
+        function logout() {
+            localStorage.removeItem('current_client');
+            window.location.href = 'index.html';
+        }
+
+        const client = JSON.parse(localStorage.getItem('current_client'));
+        if (!client) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('clientName').textContent = `${client.nom} & ${client.partenaire}`;
+
+        function updateWeddingDate() {
+            const weddingText = t[currentLang].wedding_on;
+            document.getElementById('weddingDate').textContent = `${weddingText} ${client.dateMariage}`;
+        }
+
+        const prestatairesDisponibles = {
+            'Décoration Florale': [
+                { nom: "Fleurs d'Orient", tarif: '15 000 MAD', contact: '+212522112233', image: '../assets/img/decoration.jpg' },
+                { nom: "Jardin des Roses", tarif: '18 000 MAD', contact: '+212522334455', image: '../assets/img/decoration.jpg' },
+                { nom: "Bouquet Impérial", tarif: '20 000 MAD', contact: '+212522556677', image: '../assets/img/decoration.jpg' }
+            ],
+            'Gastronomie': [
+                { nom: 'Traiteur Royal', tarif: '350 MAD/pers', contact: '+212522445566', image: '../assets/img/traiteur.jpg' },
+                { nom: 'Saveurs du Palais', tarif: '400 MAD/pers', contact: '+212522778899', image: '../assets/img/traiteur.jpg' },
+                { nom: 'Chef Gourmet', tarif: '450 MAD/pers', contact: '+212522998877', image: '../assets/img/traiteur.jpg' }
+            ],
+            'Photographie': [
+                { nom: 'Photo Dreams', tarif: '12 000 MAD', contact: '+212677889900', image: '../assets/img/photographe.jpg' },
+                { nom: 'Studio Lumière', tarif: '15 000 MAD', contact: '+212677112233', image: '../assets/img/photographe.jpg' },
+                { nom: 'Instant Magique', tarif: '10 000 MAD', contact: '+212677445566', image: '../assets/img/photographe.jpg' }
+            ],
+            'Animation Musicale': [
+                { nom: 'DJ Events', tarif: '8 000 MAD', contact: '+212644556677', image: '../assets/img/animation.jpg' },
+                { nom: 'Orchestre Harmonie', tarif: '12 000 MAD', contact: '+212644778899', image: '../assets/img/animation.jpg' },
+                { nom: 'Sound Masters', tarif: '10 000 MAD', contact: '+212644223344', image: '../assets/img/animation.jpg' }
+            ],
+            'Wedding Cake': [
+                { nom: 'Pâtisserie Royale', tarif: '4 500 MAD', contact: '+212533445566', image: '../assets/img/wedding_cake.jpg' },
+                { nom: 'Sugar and Stats', tarif: '5 000 MAD', contact: '+212533667788', image: '../assets/img/wedding_cake.jpg' },
+                { nom: 'Cake Art', tarif: '6 000 MAD', contact: '+212533889900', image: '../assets/img/wedding_cake.jpg' }
+            ],
+            'Robe de Mariée': [
+                { nom: 'Atelier Princesse', tarif: '25 000 MAD', contact: '+212522334455', image: '../assets/img/bridal-gowns.jpg' },
+                { nom: 'Couture Royale', tarif: '30 000 MAD', contact: '+212522556677', image: '../assets/img/bridal-gowns.jpg' },
+                { nom: 'Maison de la Mariée', tarif: '22 000 MAD', contact: '+212522778899', image: '../assets/img/bridal-gowns.jpg' }
+            ]
+        };
+
+        let services = [
+            { id: 1, image: '../assets/img/decoration.jpg', title: "Fleurs d'Orient", type: 'Décoration Florale', tarif: '15 000 MAD', contact: '+212522112233', statut: 'confirme' },
+            { id: 2, image: '../assets/img/traiteur.jpg', title: 'Traiteur Royal', type: 'Gastronomie', tarif: '350 MAD/pers', contact: '+212522445566', statut: 'confirme' },
+            { id: 3, image: '../assets/img/photographe.jpg', title: 'Photo Dreams', type: 'Photographie', tarif: '12 000 MAD', contact: '+212677889900', statut: 'attente' },
+            { id: 4, image: '../assets/img/animation.jpg', title: 'DJ Events', type: 'Animation Musicale', tarif: '8 000 MAD', contact: '+212644556677', statut: 'confirme' },
+            { id: 5, image: '../assets/img/wedding_cake.jpg', title: 'Pâtisserie Royale', type: 'Wedding Cake', tarif: '4 500 MAD', contact: '+212533445566', statut: 'attente' },
+            { id: 6, image: '../assets/img/bridal-gowns.jpg', title: 'Atelier Princesse', type: 'Robe de Mariée', tarif: '25 000 MAD', contact: '+212522334455', statut: 'confirme' }
+        ];
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            servicesGrid.innerHTML = services.map(s => `
+                <div class="service-card">
+                    <div class="service-header">
+                        <img src="${s.image}" alt="${s.title}" class="service-image">
+                        <div class="service-title">${s.title}</div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-detail">
+                            <span class="service-label" data-i18n="type">${t[currentLang].type}</span>
+                            <span class="service-value">${s.type}</span>
+                        </div>
+                        <div class="service-detail">
+                            <span class="service-label" data-i18n="rate">${t[currentLang].rate}</span>
+                            <span class="service-value">${s.tarif}</span>
+                        </div>
+                        <div class="service-detail">
+                            <span class="service-label" data-i18n="contact">${t[currentLang].contact}</span>
+                            <span class="service-value">${s.contact}</span>
+                        </div>
+                        <div class="status-badge status-${s.statut}">
+                            ${s.statut === 'confirme' ? t[currentLang].confirmed : t[currentLang].pending}
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn-modify" onclick="modifyService(${s.id})">
+                                <i class="fas fa-exchange-alt"></i> <span data-i18n="change">${t[currentLang].change}</span>
+                            </button>
+                            <button class="btn-delete" onclick="deleteService(${s.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let currentServiceId = null;
+
+        function modifyService(serviceId) {
+            const service = services.find(s => s.id === serviceId);
+            if (!service) return;
+
+            currentServiceId = serviceId;
+            document.getElementById('inputType').value = service.type;
+
+            const prestataires = prestatairesDisponibles[service.type] || [];
+            const selectPrestataire = document.getElementById('selectPrestataire');
+            
+            selectPrestataire.innerHTML = `<option value="">${t[currentLang].choose_vendor}</option>` + 
+                prestataires.map((p, index) => 
+                    `<option value="${index}">${p.nom}</option>`
+                ).join('');
+
+            document.getElementById('prestataireInfo').style.display = 'none';
+            document.getElementById('modalModify').style.display = 'flex';
+        }
+
+        document.getElementById('selectPrestataire').addEventListener('change', function() {
+            const service = services.find(s => s.id === currentServiceId);
+            const prestataires = prestatairesDisponibles[service.type] || [];
+            const selectedIndex = this.value;
+            
+            if (selectedIndex !== '') {
+                const prestataire = prestataires[selectedIndex];
+                document.getElementById('infoTarif').textContent = prestataire.tarif;
+                document.getElementById('infoContact').textContent = prestataire.contact;
+                document.getElementById('prestataireInfo').style.display = 'block';
+            } else {
+                document.getElementById('prestataireInfo').style.display = 'none';
+            }
+        });
+
+        function closeModal() {
+            document.getElementById('modalModify').style.display = 'none';
+            currentServiceId = null;
+        }
+
+        function deleteService(serviceId) {
+            const service = services.find(s => s.id === serviceId);
+            if (!service) return;
+
+            if (confirm(`${t[currentLang].delete_confirm} "${service.title}" ?\n\n${t[currentLang].delete_warning}`)) {
+                services = services.filter(s => s.id !== serviceId);
+                alert(t[currentLang].delete_success);
+                renderServices();
+            }
+        }
+
+        document.getElementById('modifyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const service = services.find(s => s.id === currentServiceId);
+            if (!service) return;
+
+            const selectedIndex = document.getElementById('selectPrestataire').value;
+            if (selectedIndex === '') {
+                alert(t[currentLang].select_vendor_warning);
+                return;
+            }
+
+            const prestataires = prestatairesDisponibles[service.type];
+            const nouveauPrestataire = prestataires[selectedIndex];
+
+            service.title = nouveauPrestataire.nom;
+            service.tarif = nouveauPrestataire.tarif;
+            service.contact = nouveauPrestataire.contact;
+            service.image = nouveauPrestataire.image;
+            service.statut = 'attente';
+
+            alert(t[currentLang].change_success);
+            renderServices();
+            closeModal();
+        });
+
+        document.getElementById('modalModify').addEventListener('click', (e) => {
+            if (e.target.id === 'modalModify') {
+                closeModal();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'fr';
+            currentLang = lang;
+            document.getElementById('langSelect').value = lang;
+            setLang(lang);
+        });
+
+        renderServices();
+    </script>
+</body>
+</html>

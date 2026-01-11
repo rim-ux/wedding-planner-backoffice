@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Messages | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .client-info {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .client-info h3 {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 5px;
+        }
+        .client-info p {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+        .message-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .message-container h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(197, 160, 89, 0.2);
+            border-radius: 12px;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .btn-send {
+            padding: 15px 40px;
+            background: var(--rose-gold);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .btn-send:hover { opacity: 0.9; }
+        .messages-history {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .messages-history h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        .message-item {
+            padding: 20px;
+            background: var(--silk);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .message-subject {
+            font-weight: 600;
+            color: var(--rose-gold);
+        }
+        .message-date {
+            color: #777;
+            font-size: 0.85rem;
+        }
+        .message-body {
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .message-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-left: 10px;
+        }
+        .status-repondu {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+        .status-attente {
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+        }
+        
+        /* RTL Support */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+        body[dir="rtl"] .message-status {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
+            </select>
+        </div>
+        
+        <div class="client-info">
+            <h3 id="clientName"></h3>
+            <p id="weddingDate"></p>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="client-dashboard.html" class="menu-link">
+                    <i class="fas fa-home"></i> 
+                    <span data-i18n="home">Accueil</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-services.html" class="menu-link">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="my_services">Mes Services</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-planning.html" class="menu-link">
+                    <i class="fas fa-calendar"></i> 
+                    <span data-i18n="planning">Planning</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-paiements.html" class="menu-link">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="payments">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-messages.html" class="menu-link active">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+        </ul>
+        <li class="menu-item">
+    <a href="client-profil.html" class="menu-link">
+        <i class="fas fa-user-circle"></i> 
+        <span data-i18n="my_profile">Mon Profil</span>
+    </a>
+</li>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 data-i18n="messaging_title">Messagerie</h1>
+            <p data-i18n="messaging_subtitle">Contactez notre équipe</p>
+        </header>
+
+        <div class="message-container">
+            <h2 data-i18n="new_message">Nouveau Message</h2>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label data-i18n="category">Catégorie</label>
+                    <select id="category" required>
+                        <option value="" data-i18n="select_category">Sélectionner une catégorie</option>
+                        <option value="question" data-i18n="cat_general">Question générale</option>
+                        <option value="prestataire" data-i18n="cat_vendor">Prestataire / Service</option>
+                        <option value="paiement" data-i18n="cat_payment">Paiement</option>
+                        <option value="planning" data-i18n="cat_planning">Planning / Organisation</option>
+                        <option value="urgence" data-i18n="cat_urgent">Urgence</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="subject">Sujet</label>
+                    <input type="text" id="subject" data-i18n-placeholder="subject_placeholder" placeholder="Ex: Question sur le menu" required>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="message">Message</label>
+                    <textarea id="message" data-i18n-placeholder="message_placeholder" placeholder="Écrivez votre message ici..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-send">
+                    <i class="fas fa-paper-plane"></i> 
+                    <span data-i18n="send">Envoyer</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="messages-history">
+            <h2 data-i18n="history_title">Historique des Messages</h2>
+            <div id="messagesHistory">
+                <div class="message-item">
+                    <div class="message-header">
+                        <div>
+                            <span class="message-subject" data-i18n="msg1_subject">Question sur le menu</span>
+                            <span class="message-status status-repondu" data-i18n="status_answered">Répondu</span>
+                        </div>
+                        <span class="message-date">2026-01-10</span>
+                    </div>
+                    <div class="message-body">
+                        <strong data-i18n="your_message">Votre message :</strong><br>
+                        <span data-i18n="msg1_body">Bonjour, j'aimerais savoir s'il est possible de personnaliser le menu pour inclure des options végétariennes ?</span>
+                        <br><br>
+                        <strong style="color: var(--rose-gold);" data-i18n="team_response">Réponse de l'équipe :</strong><br>
+                        <span data-i18n="msg1_response">Bonjour ! Bien sûr, nous pouvons tout à fait adapter le menu. Notre chef propose plusieurs options végétariennes délicieuses. Nous vous enverrons des propositions par email d'ici demain.</span>
+                    </div>
+                </div>
+
+                <div class="message-item">
+                    <div class="message-header">
+                        <div>
+                            <span class="message-subject" data-i18n="msg2_subject">Demande de modification planning</span>
+                            <span class="message-status status-attente" data-i18n="status_pending">En attente</span>
+                        </div>
+                        <span class="message-date">2026-01-09</span>
+                    </div>
+                    <div class="message-body">
+                        <strong data-i18n="your_message">Votre message :</strong><br>
+                        <span data-i18n="msg2_body">Pourriez-vous décaler l'horaire de la cérémonie de 14h à 15h ? Un membre important de la famille arrive en retard.</span>
+                    </div>
+                </div>
+
+                <div class="message-item">
+                    <div class="message-header">
+                        <div>
+                            <span class="message-subject" data-i18n="msg3_subject">Confirmation photographe</span>
+                            <span class="message-status status-repondu" data-i18n="status_answered">Répondu</span>
+                        </div>
+                        <span class="message-date">2026-01-08</span>
+                    </div>
+                    <div class="message-body">
+                        <strong data-i18n="your_message">Votre message :</strong><br>
+                        <span data-i18n="msg3_body">Le photographe Photo Dreams est-il bien confirmé pour notre mariage ?</span>
+                        <br><br>
+                        <strong style="color: var(--rose-gold);" data-i18n="team_response">Réponse de l'équipe :</strong><br>
+                        <span data-i18n="msg3_response">Oui, Photo Dreams est bien confirmé ! L'équipe sera présente dès 10h pour la préparation. Tout est organisé.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'fr';
+        
+        const t = {
+            fr: {
+                home: "Accueil", my_services: "Mes Services", planning: "Planning", payments: "Paiements", messages: "Messages",
+                logout: "Déconnexion", messaging_title: "Messagerie", messaging_subtitle: "Contactez notre équipe",
+                new_message: "Nouveau Message", category: "Catégorie", select_category: "Sélectionner une catégorie",
+                cat_general: "Question générale", cat_vendor: "Prestataire / Service", cat_payment: "Paiement",
+                cat_planning: "Planning / Organisation", cat_urgent: "Urgence", subject: "Sujet",
+                subject_placeholder: "Ex: Question sur le menu", message: "Message",
+                message_placeholder: "Écrivez votre message ici...", send: "Envoyer",
+                history_title: "Historique des Messages", your_message: "Votre message :", team_response: "Réponse de l'équipe :",
+                status_answered: "Répondu", status_pending: "En attente", wedding_on: "Mariage le",
+                msg1_subject: "Question sur le menu",
+                msg1_body: "Bonjour, j'aimerais savoir s'il est possible de personnaliser le menu pour inclure des options végétariennes ?",
+                msg1_response: "Bonjour ! Bien sûr, nous pouvons tout à fait adapter le menu. Notre chef propose plusieurs options végétariennes délicieuses. Nous vous enverrons des propositions par email d'ici demain.",
+                msg2_subject: "Demande de modification planning",
+                msg2_body: "Pourriez-vous décaler l'horaire de la cérémonie de 14h à 15h ? Un membre important de la famille arrive en retard.",
+                msg3_subject: "Confirmation photographe",
+                msg3_body: "Le photographe Photo Dreams est-il bien confirmé pour notre mariage ?",
+                msg3_response: "Oui, Photo Dreams est bien confirmé ! L'équipe sera présente dès 10h pour la préparation. Tout est organisé.",
+                message_sent: "Message envoyé avec succès ! Notre équipe vous répondra dans les plus brefs délais."
+            },
+            en: {
+                home: "Home", my_services: "My Services", planning: "Planning", payments: "Payments", messages: "Messages",
+                logout: "Logout", messaging_title: "Messaging", messaging_subtitle: "Contact our team",
+                new_message: "New Message", category: "Category", select_category: "Select a category",
+                cat_general: "General question", cat_vendor: "Vendor / Service", cat_payment: "Payment",
+                cat_planning: "Planning / Organization", cat_urgent: "Urgent", subject: "Subject",
+                subject_placeholder: "Ex: Question about menu", message: "Message",
+                message_placeholder: "Write your message here...", send: "Send",
+                history_title: "Message History", your_message: "Your message:", team_response: "Team response:",
+                status_answered: "Answered", status_pending: "Pending", wedding_on: "Wedding on",
+                msg1_subject: "Question about menu",
+                msg1_body: "Hello, I'd like to know if it's possible to customize the menu to include vegetarian options?",
+                msg1_response: "Hello! Of course, we can definitely adapt the menu. Our chef offers several delicious vegetarian options. We'll send you proposals by email by tomorrow.",
+                msg2_subject: "Request to modify planning",
+                msg2_body: "Could you shift the ceremony time from 2pm to 3pm? An important family member is arriving late.",
+                msg3_subject: "Photographer confirmation",
+                msg3_body: "Is Photo Dreams photographer confirmed for our wedding?",
+                msg3_response: "Yes, Photo Dreams is confirmed! The team will be present from 10am for preparation. Everything is organized.",
+                message_sent: "Message sent successfully! Our team will respond as soon as possible."
+            },
+            ar: {
+                home: "الرئيسية", my_services: "خدماتي", planning: "التخطيط", payments: "المدفوعات", messages: "الرسائل",
+                logout: "تسجيل الخروج", messaging_title: "المراسلة", messaging_subtitle: "تواصل مع فريقنا",
+                new_message: "رسالة جديدة", category: "الفئة", select_category: "اختر فئة",
+                cat_general: "سؤال عام", cat_vendor: "مقدم خدمة", cat_payment: "الدفع",
+                cat_planning: "التخطيط / التنظيم", cat_urgent: "عاجل", subject: "الموضوع",
+                subject_placeholder: "مثال: سؤال حول القائمة", message: "الرسالة",
+                message_placeholder: "اكتب رسالتك هنا...", send: "إرسال",
+                history_title: "سجل الرسائل", your_message: "رسالتك:", team_response: "رد الفريق:",
+                status_answered: "تم الرد", status_pending: "قيد الانتظار", wedding_on: "الزفاف في",
+                msg1_subject: "سؤال حول القائمة",
+                msg1_body: "مرحباً، أود أن أعرف إذا كان من الممكن تخصيص القائمة لتشمل خيارات نباتية؟",
+                msg1_response: "مرحباً! بالطبع، يمكننا تكييف القائمة. يقدم طاهينا عدة خيارات نباتية لذيذة. سنرسل لك المقترحات عبر البريد الإلكتروني بحلول الغد.",
+                msg2_subject: "طلب تعديل الجدول",
+                msg2_body: "هل يمكنكم تأجيل موعد الحفل من الساعة 2 ظهراً إلى 3 ظهراً؟ أحد أفراد العائلة المهمين سيتأخر.",
+                msg3_subject: "تأكيد المصور",
+                msg3_body: "هل مصور Photo Dreams مؤكد لحفل زفافنا؟",
+                msg3_response: "نعم، Photo Dreams مؤكد! سيكون الفريق حاضراً من الساعة 10 صباحاً للتحضير. كل شيء منظم.",
+                message_sent: "تم إرسال الرسالة بنجاح! سيرد فريقنا في أقرب وقت ممكن."
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang] && t[lang][key]) {
+                    el.textContent = t[lang][key];
+                }
+            });
+            
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[lang] && t[lang][key]) {
+                    el.placeholder = t[lang][key];
+                }
+            });
+            
+            updateWeddingDate();
+        }
+
+        function logout() {
+            localStorage.removeItem('current_client');
+            window.location.href = 'index.html';
+        }
+
+        const client = JSON.parse(localStorage.getItem('current_client'));
+        if (!client) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('clientName').textContent = `${client.nom} & ${client.partenaire}`;
+
+        function updateWeddingDate() {
+            const weddingText = t[currentLang].wedding_on;
+            document.getElementById('weddingDate').textContent = `${weddingText} ${client.dateMariage}`;
+        }
+
+        document.getElementById('messageForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const category = document.getElementById('category').options[document.getElementById('category').selectedIndex].text;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            const messageHTML = `
+                <div class="message-item">
+                    <div class="message-header">
+                        <div>
+                            <span class="message-subject">${subject}</span>
+                            <span class="message-status status-attente">${t[currentLang].status_pending}</span>
+                        </div>
+                        <span class="message-date">${new Date().toISOString().split('T')[0]}</span>
+                    </div>
+                    <div class="message-body">
+                        <strong>${t[currentLang].your_message}</strong><br>
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('messagesHistory').insertAdjacentHTML('afterbegin', messageHTML);
+            
+            const allData = JSON.parse(localStorage.getItem('goldenpromise_data') || '{}');
+            if (!allData.messages) allData.messages = [];
+            
+            allData.messages.push({
+                id: Date.now(),
+                expediteur: `${client.nom} ${client.partenaire}`,
+                sujet: subject,
+                date: new Date().toISOString().split('T')[0],
+                statut: 'non-lu',
+                message: message
+            });
+            
+            localStorage.setItem('goldenpromise_data', JSON.stringify(allData));
+            
+            alert(t[currentLang].message_sent);
+            document.getElementById('messageForm').reset();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'fr';
+            currentLang = lang;
+            document.getElementById('langSelect').value = lang;
+            setLang(lang);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Espace | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .client-info {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .client-info h3 {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 5px;
+        }
+        .client-info p {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(197, 160, 89, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 20px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .countdown-card {
+            background: linear-gradient(135deg, var(--rose-gold), #a68847);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .countdown-card h2 {
+            font-family: 'Parisienne', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .countdown-item {
+            text-align: center;
+        }
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: 600;
+            display: block;
+        }
+        .countdown-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .action-btn {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: 0.3s;
+        }
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(197, 160, 89, 0.2);
+        }
+        .action-btn i {
+            font-size: 2rem;
+            color: var(--rose-gold);
+            margin-bottom: 15px;
+        }
+        .action-btn span {
+            display: block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* RTL Support pour Arabe */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
+            </select>
+        </div>
+        
+        <div class="client-info">
+            <h3 id="clientName"></h3>
+            <p id="weddingDate"></p>
+        </div>
+        
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="client-dashboard.html" class="menu-link active">
+                    <i class="fas fa-home"></i> 
+                    <span data-i18n="home">Accueil</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-services.html" class="menu-link">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="my_services">Mes Services</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-planning.html" class="menu-link">
+                    <i class="fas fa-calendar"></i> 
+                    <span data-i18n="planning">Planning</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-paiements.html" class="menu-link">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="payments">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-messages.html" class="menu-link">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+        </ul>
+        <li class="menu-item">
+    <a href="client-profil.html" class="menu-link">
+        <i class="fas fa-user-circle"></i> 
+        <span data-i18n="my_profile">Mon Profil</span>
+    </a>
+</li>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 data-i18n="my_space">Mon Espace Mariage</h1>
+            <p data-i18n="welcome">Bienvenue dans votre espace personnel</p>
+        </header>
+
+        <!-- COMPTE À REBOURS -->
+        <div class="countdown-card">
+            <h2 data-i18n="countdown_title">Compte à rebours jusqu'au grand jour 💍</h2>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">0</span>
+                    <span class="countdown-label" data-i18n="days">Jours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">0</span>
+                    <span class="countdown-label" data-i18n="hours">Heures</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">0</span>
+                    <span class="countdown-label" data-i18n="minutes">Minutes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATISTIQUES -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="stat-value" id="servicesCount">0</div>
+                <div class="stat-label" data-i18n="services_booked">Services réservés</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                <div class="stat-value" id="budgetValue">0 MAD</div>
+                <div class="stat-label" data-i18n="total_budget">Budget total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                <div class="stat-value" id="progressValue">0%</div>
+                <div class="stat-label" data-i18n="progress">Progression</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="guestsValue">0</div>
+                <div class="stat-label" data-i18n="guests">Invités</div>
+            </div>
+        </div>
+
+        <!-- ACTIONS RAPIDES -->
+        <h2 style="margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; font-size: 2rem;" data-i18n="quick_actions">Actions Rapides</h2>
+        <div class="quick-actions">
+            <a href="client-services.html" class="action-btn">
+                <i class="fas fa-plus-circle"></i>
+                <span data-i18n="book_service">Réserver un service</span>
+            </a>
+            <a href="client-paiements.html" class="action-btn">
+                <i class="fas fa-credit-card"></i>
+                <span data-i18n="make_payment">Effectuer un paiement</span>
+            </a>
+            <a href="client-messages.html" class="action-btn">
+                <i class="fas fa-envelope"></i>
+                <span data-i18n="contact_team">Contacter l'équipe</span>
+            </a>
+            <a href="client-planning.html" class="action-btn">
+                <i class="fas fa-calendar-alt"></i>
+                <span data-i18n="view_planning">Voir le planning</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'fr';
+        
+        const t = {
+            fr: {
+                home: "Accueil",
+                my_services: "Mes Services",
+                planning: "Planning",
+                payments: "Paiements",
+                messages: "Messages",
+                logout: "Déconnexion",
+                my_space: "Mon Espace Mariage",
+                welcome: "Bienvenue dans votre espace personnel",
+                countdown_title: "Compte à rebours jusqu'au grand jour 💍",
+                days: "Jours",
+                hours: "Heures",
+                minutes: "Minutes",
+                services_booked: "Services réservés",
+                total_budget: "Budget total",
+                progress: "Progression",
+                guests: "Invités",
+                quick_actions: "Actions Rapides",
+                book_service: "Réserver un service",
+                make_payment: "Effectuer un paiement",
+                contact_team: "Contacter l'équipe",
+                view_planning: "Voir le planning",
+                wedding_on: "Mariage le"
+            },
+            en: {
+                home: "Home",
+                my_services: "My Services",
+                planning: "Planning",
+                payments: "Payments",
+                messages: "Messages",
+                logout: "Logout",
+                my_space: "My Wedding Space",
+                welcome: "Welcome to your personal space",
+                countdown_title: "Countdown to the big day 💍",
+                days: "Days",
+                hours: "Hours",
+                minutes: "Minutes",
+                services_booked: "Services booked",
+                total_budget: "Total budget",
+                progress: "Progress",
+                guests: "Guests",
+                quick_actions: "Quick Actions",
+                book_service: "Book a service",
+                make_payment: "Make a payment",
+                contact_team: "Contact the team",
+                view_planning: "View planning",
+                wedding_on: "Wedding on"
+            },
+            ar: {
+                home: "الرئيسية",
+                my_services: "خدماتي",
+                planning: "التخطيط",
+                payments: "المدفوعات",
+                messages: "الرسائل",
+                logout: "تسجيل الخروج",
+                my_space: "مساحة زفافي",
+                welcome: "مرحبا بك في مساحتك الشخصية",
+                countdown_title: "العد التنازلي لليوم الكبير 💍",
+                days: "أيام",
+                hours: "ساعات",
+                minutes: "دقائق",
+                services_booked: "الخدمات المحجوزة",
+                total_budget: "الميزانية الإجمالية",
+                progress: "التقدم",
+                guests: "الضيوف",
+                quick_actions: "إجراءات سريعة",
+                book_service: "حجز خدمة",
+                make_payment: "إجراء دفع",
+                contact_team: "الاتصال بالفريق",
+                view_planning: "عرض التخطيط",
+                wedding_on: "الزفاف في"
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang] && t[lang][key]) {
+                    el.textContent = t[lang][key];
+                }
+            });
+            
+            // Mettre à jour la date de mariage traduite
+            updateWeddingDate();
+        }
+
+        function logout() {
+            localStorage.removeItem('current_client');
+            window.location.href = 'index.html';
+        }
+
+        // Charger les données du client
+        const client = JSON.parse(localStorage.getItem('current_client'));
+        if (!client) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('clientName').textContent = `${client.nom} & ${client.partenaire}`;
+        document.getElementById('budgetValue').textContent = client.budget.toLocaleString() + ' MAD';
+
+        function updateWeddingDate() {
+            const weddingText = t[currentLang].wedding_on;
+            document.getElementById('weddingDate').textContent = `${weddingText} ${client.dateMariage}`;
+        }
+
+        // Compte à rebours
+        function updateCountdown() {
+            const weddingDate = new Date(client.dateMariage);
+            const now = new Date();
+            const diff = weddingDate - now;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+
+        // Statistiques (exemple - à personnaliser)
+        document.getElementById('servicesCount').textContent = '5';
+        document.getElementById('progressValue').textContent = '65%';
+        document.getElementById('guestsValue').textContent = '150';
+
+        // Initialiser la langue
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'fr';
+            currentLang = lang;
+            document.getElementById('langSelect').value = lang;
+            setLang(lang);
+        });
+    </script>
+</body>
+</html>

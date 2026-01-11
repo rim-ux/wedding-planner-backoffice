@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clients | Golden Promise</title>
+    <title>Prestataires | Golden Promise</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -140,16 +140,17 @@
             border-bottom: 1px solid var(--silk);
         }
         tr:hover { background: var(--silk); }
-        .status {
+        .badge {
             padding: 6px 15px;
             border-radius: 50px;
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .status-actif { background: rgba(143, 163, 130, 0.15); color: #5a6b4e; }
-        .status-attente { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
-        .status-annule { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+        .badge-traiteur { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .badge-decoration { background: rgba(197, 160, 89, 0.1); color: var(--rose-gold); }
+        .badge-photo { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .badge-musique { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
         .action-btns {
             display: flex;
             gap: 10px;
@@ -167,6 +168,8 @@
             background: var(--rose-gold);
             color: white;
         }
+        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -192,6 +195,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 2rem;
             margin-bottom: 30px;
+            color: var(--rose-gold);
         }
         .form-group {
             margin-bottom: 20px;
@@ -219,8 +223,35 @@
             background: #ddd;
             color: var(--text);
         }
-
-        /* RTL Support pour l'arabe */
+        
+        /* Modal Détails */
+        .detail-row {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--silk);
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            width: 150px;
+            font-weight: 600;
+        }
+        .detail-value {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .rating {
+            color: var(--rose-gold);
+            font-size: 1.3rem;
+        }
+        
+        /* RTL Support */
         body[dir="rtl"] .sidebar {
             border-right: none;
             border-left: 1px solid rgba(197, 160, 89, 0.1);
@@ -245,7 +276,6 @@
     <div class="sidebar">
         <div class="logo">Golden <span>Promise</span></div>
         
-        <!-- SÉLECTEUR DE LANGUE -->
         <div style="padding: 0 20px; margin-bottom: 30px;">
             <select id="langSelect" onchange="setLang(this.value)" style="
                 width: 100%;
@@ -268,11 +298,11 @@
             <li class="menu-item">
                 <a href="dashboard.html" class="menu-link">
                     <i class="fas fa-chart-line"></i> 
-                    <span data-i18n="dashboard">Dashboard</span>
+                    <span data-i18n="dashboard">Tableau de bord</span>
                 </a>
             </li>
             <li class="menu-item">
-                <a href="clients.html" class="menu-link active">
+                <a href="clients.html" class="menu-link">
                     <i class="fas fa-users"></i> 
                     <span data-i18n="clients">Clients</span>
                 </a>
@@ -284,7 +314,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="prestataires.html" class="menu-link">
+                <a href="prestataires.html" class="menu-link active">
                     <i class="fas fa-briefcase"></i> 
                     <span data-i18n="prestataires">Prestataires</span>
                 </a>
@@ -310,16 +340,16 @@
 
     <div class="main-content">
         <header>
-            <h1 data-i18n="clients_title">Gestion des Clients</h1>
-            <p data-i18n="clients_subtitle">Liste complète de vos futurs mariés</p>
+            <h1 data-i18n="prestataires_title">Gestion des Prestataires</h1>
+            <p data-i18n="prestataires_subtitle">Liste de vos partenaires</p>
         </header>
 
         <div class="actions-bar">
-            <input type="text" class="search-box" id="searchInput" data-i18n="search" placeholder="Rechercher un client...">
+            <input type="text" class="search-box" id="searchInput" data-i18n="search" placeholder="Rechercher...">
             <div>
-                <button class="btn" onclick="openModal()">
+                <button class="btn" onclick="openAddModal()">
                     <i class="fas fa-plus"></i> 
-                    <span data-i18n="add_client">Ajouter Client</span>
+                    <span data-i18n="add_vendor">Ajouter Prestataire</span>
                 </button>
                 <button class="btn" onclick="exportCSV()">
                     <i class="fas fa-download"></i> 
@@ -333,56 +363,81 @@
                 <thead>
                     <tr>
                         <th data-i18n="id">ID</th>
-                        <th data-i18n="name">Nom & Couple</th>
-                        <th data-i18n="email">Email</th>
+                        <th data-i18n="name">Nom</th>
+                        <th data-i18n="category">Catégorie</th>
                         <th data-i18n="phone">Téléphone</th>
-                        <th data-i18n="date">Date Mariage</th>
-                        <th data-i18n="budget">Budget</th>
-                        <th data-i18n="status">Statut</th>
+                        <th data-i18n="email">Email</th>
+                        <th data-i18n="rating">Note</th>
                         <th data-i18n="actions">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="clientsTable"></tbody>
+                <tbody id="prestatairesTable"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- MODAL AJOUTER/MODIFIER -->
-    <div id="clientModal" class="modal">
+    <!-- MODAL DÉTAILS -->
+    <div id="detailsModal" class="modal">
         <div class="modal-content">
-            <h2 id="modalTitle" data-i18n="add_title">Ajouter un Client</h2>
-            <form id="clientForm">
+            <h2 data-i18n="vendor_details">📋 Détails du Prestataire</h2>
+            <div class="detail-row">
+                <span class="detail-label" data-i18n="name">Nom :</span>
+                <span class="detail-value" id="detailNom">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label" data-i18n="category">Catégorie :</span>
+                <span class="detail-value" id="detailCategorie">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label" data-i18n="phone">Téléphone :</span>
+                <span class="detail-value" id="detailTel">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label" data-i18n="email">Email :</span>
+                <span class="detail-value" id="detailEmail">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label" data-i18n="rating">Note :</span>
+                <span class="detail-value rating" id="detailNote">-</span>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeDetailsModal()">
+                    <i class="fas fa-times"></i> 
+                    <span data-i18n="close">Fermer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AJOUTER/MODIFIER -->
+    <div id="vendorModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle" data-i18n="add_vendor_title">Ajouter un Prestataire</h2>
+            <form id="vendorForm">
                 <div class="form-group">
-                    <label data-i18n="name_label">Nom</label>
+                    <label data-i18n="name">Nom</label>
                     <input type="text" id="nom" required>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="partner">Partenaire</label>
-                    <input type="text" id="partenaire" required>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="email">Email</label>
-                    <input type="email" id="email" required>
+                    <label data-i18n="category">Catégorie</label>
+                    <select id="categorie" required>
+                        <option value="traiteur">Traiteur</option>
+                        <option value="decoration">Décoration</option>
+                        <option value="photo">Photographie</option>
+                        <option value="musique">Musique</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label data-i18n="phone">Téléphone</label>
                     <input type="tel" id="tel" required>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="date">Date Mariage</label>
-                    <input type="date" id="dateMariage" required>
+                    <label data-i18n="email">Email</label>
+                    <input type="email" id="email" required>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="budget">Budget (MAD)</label>
-                    <input type="number" id="budget" required>
-                </div>
-                <div class="form-group">
-                    <label data-i18n="status">Statut</label>
-                    <select id="statut">
-                        <option value="actif">Actif</option>
-                        <option value="attente">En attente</option>
-                        <option value="annule">Annulé</option>
-                    </select>
+                    <label data-i18n="rating">Note (1-5)</label>
+                    <input type="number" id="note" min="1" max="5" required>
                 </div>
                 <div class="modal-actions">
                     <button type="submit" class="btn" data-i18n="save">Enregistrer</button>
@@ -392,147 +447,188 @@
         </div>
     </div>
 
-    <!-- SCRIPT PRINCIPAL -->
     <script>
         function logout() {
             window.location.href = 'index.html';
         }
 
-        const defaultClients = [
-            { id: 1, nom: "Sarah El Amrani", partenaire: "Ahmed", email: "sarah@email.com", tel: "+212612345678", dateMariage: "2026-08-15", budget: 350000, statut: "actif" },
-            { id: 2, nom: "Fatima Bennani", partenaire: "Youssef", email: "fatima@email.com", tel: "+212698765432", dateMariage: "2026-06-20", budget: 280000, statut: "attente" },
-            { id: 3, nom: "Amina Alaoui", partenaire: "Mehdi", email: "amina@email.com", tel: "+212655443322", dateMariage: "2026-09-10", budget: 420000, statut: "actif" },
-            { id: 4, nom: "Leila Idrissi", partenaire: "Omar", email: "leila@email.com", tel: "+212677889900", dateMariage: "2026-07-25", budget: 310000, statut: "actif" },
-            { id: 5, nom: "Zineb Tazi", partenaire: "Karim", email: "zineb@email.com", tel: "+212644556677", dateMariage: "2026-05-18", budget: 190000, statut: "annule" }
+        // Données des prestataires
+        const defaultPrestataires = [
+            { id: 1, nom: "Traiteur Royal", categorie: "traiteur", tel: "+212 6 12 34 56 78", email: "contact@royal.ma", note: 5 },
+            { id: 2, nom: "Décor Art", categorie: "decoration", tel: "+212 6 98 76 54 32", email: "info@decorart.ma", note: 4 },
+            { id: 3, nom: "Photo Pro", categorie: "photo", tel: "+212 6 55 44 33 22", email: "photo@pro.ma", note: 5 },
+            { id: 4, nom: "DJ Events", categorie: "musique", tel: "+212 6 77 88 99 00", email: "dj@events.ma", note: 4 }
         ];
 
         let allData = JSON.parse(localStorage.getItem('goldenpromise_data') || '{}');
         
-        if (!allData.clients || allData.clients.length === 0) {
-            allData.clients = defaultClients;
+        if (!allData.prestataires || allData.prestataires.length === 0) {
+            allData.prestataires = defaultPrestataires;
             localStorage.setItem('goldenpromise_data', JSON.stringify(allData));
         }
 
-        let clients = allData.clients;
+        let prestataires = allData.prestataires;
         let editingId = null;
 
-        function renderTable(dataToRender = clients) {
-            const tbody = document.getElementById('clientsTable');
-            tbody.innerHTML = dataToRender.map(client => `
+        const categorieClasses = {
+            traiteur: 'badge-traiteur',
+            decoration: 'badge-decoration',
+            photo: 'badge-photo',
+            musique: 'badge-musique'
+        };
+
+        const categorieNoms = {
+            traiteur: 'Traiteur',
+            decoration: 'Décoration',
+            photo: 'Photographie',
+            musique: 'Musique'
+        };
+
+        function renderTable() {
+            const tbody = document.getElementById('prestatairesTable');
+            tbody.innerHTML = prestataires.map(p => `
                 <tr>
-                    <td>${client.id}</td>
-                    <td><strong>${client.nom} & ${client.partenaire}</strong></td>
-                    <td>${client.email}</td>
-                    <td>${client.tel}</td>
-                    <td>${client.dateMariage}</td>
-                    <td>${client.budget.toLocaleString()} MAD</td>
-                    <td><span class="status status-${client.statut}">${client.statut}</span></td>
+                    <td>${p.id || '-'}</td>
+                    <td><strong>${p.nom || 'Sans nom'}</strong></td>
+                    <td><span class="badge ${categorieClasses[p.categorie] || 'badge-traiteur'}">${categorieNoms[p.categorie] || 'Non défini'}</span></td>
+                    <td>${p.tel || 'Non défini'}</td>
+                    <td>${p.email || 'Non défini'}</td>
+                    <td>${p.note ? '⭐'.repeat(p.note) : 'Non noté'}</td>
                     <td class="action-btns">
-                        <button class="btn-icon" onclick="viewClient(${client.id})"><i class="fas fa-eye"></i></button>
-                        <button class="btn-icon" onclick="editClient(${client.id})"><i class="fas fa-pen"></i></button>
-                        <button class="btn-icon" onclick="deleteClient(${client.id})"><i class="fas fa-trash"></i></button>
+                        <button class="btn-icon" onclick="viewVendor(${p.id})" title="Voir détails">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon" onclick="editVendor(${p.id})" title="Modifier">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn-icon" onclick="deleteVendor(${p.id})" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function openModal(client = null) {
-            document.getElementById('clientModal').style.display = 'flex';
-            if (client) {
-                document.getElementById('modalTitle').textContent = t[currentLang].edit_title;
-                document.getElementById('nom').value = client.nom;
-                document.getElementById('partenaire').value = client.partenaire;
-                document.getElementById('email').value = client.email;
-                document.getElementById('tel').value = client.tel;
-                document.getElementById('dateMariage').value = client.dateMariage;
-                document.getElementById('budget').value = client.budget;
-                document.getElementById('statut').value = client.statut;
-                editingId = client.id;
-            } else {
-                document.getElementById('modalTitle').textContent = t[currentLang].add_title;
-                document.getElementById('clientForm').reset();
-                editingId = null;
+        // BOUTON VOIR - Affiche modal de détails
+        function viewVendor(id) {
+            const vendor = prestataires.find(p => p.id === id);
+            if (vendor) {
+                document.getElementById('detailNom').textContent = vendor.nom;
+                document.getElementById('detailCategorie').innerHTML = `<span class="badge ${categorieClasses[vendor.categorie]}">${categorieNoms[vendor.categorie]}</span>`;
+                document.getElementById('detailTel').textContent = vendor.tel;
+                document.getElementById('detailEmail').textContent = vendor.email;
+                document.getElementById('detailNote').textContent = '⭐'.repeat(vendor.note) + ` (${vendor.note}/5)`;
+                document.getElementById('detailsModal').style.display = 'flex';
             }
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+
+        // Ouvrir modal pour ajouter
+        function openAddModal() {
+            document.getElementById('vendorModal').style.display = 'flex';
+            document.getElementById('modalTitle').textContent = 'Ajouter un Prestataire';
+            document.getElementById('vendorForm').reset();
+            editingId = null;
         }
 
         function closeModal() {
-            document.getElementById('clientModal').style.display = 'none';
+            document.getElementById('vendorModal').style.display = 'none';
         }
 
-        function viewClient(id) {
-            localStorage.setItem('selectedClientId', id);
-            window.location.href = `client-details.html?id=${id}`;
+        // BOUTON MODIFIER
+        function editVendor(id) {
+            const vendor = prestataires.find(p => p.id === id);
+            if (vendor) {
+                document.getElementById('vendorModal').style.display = 'flex';
+                document.getElementById('modalTitle').textContent = 'Modifier Prestataire';
+                document.getElementById('nom').value = vendor.nom;
+                document.getElementById('categorie').value = vendor.categorie;
+                document.getElementById('tel').value = vendor.tel;
+                document.getElementById('email').value = vendor.email;
+                document.getElementById('note').value = vendor.note;
+                editingId = vendor.id;
+            }
         }
 
-        document.getElementById('clientForm').addEventListener('submit', (e) => {
+        // BOUTON SUPPRIMER
+        function deleteVendor(id) {
+            if (confirm('Voulez-vous vraiment supprimer ce prestataire ?')) {
+                prestataires = prestataires.filter(p => p.id !== id);
+                allData.prestataires = prestataires;
+                localStorage.setItem('goldenpromise_data', JSON.stringify(allData));
+                renderTable();
+            }
+        }
+
+        // Soumettre le formulaire
+        document.getElementById('vendorForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const client = {
+            const vendor = {
                 id: editingId || Date.now(),
                 nom: document.getElementById('nom').value,
-                partenaire: document.getElementById('partenaire').value,
-                email: document.getElementById('email').value,
+                categorie: document.getElementById('categorie').value,
                 tel: document.getElementById('tel').value,
-                dateMariage: document.getElementById('dateMariage').value,
-                budget: parseInt(document.getElementById('budget').value),
-                statut: document.getElementById('statut').value
+                email: document.getElementById('email').value,
+                note: parseInt(document.getElementById('note').value)
             };
 
             if (editingId) {
-                const index = clients.findIndex(c => c.id === editingId);
-                clients[index] = client;
+                const index = prestataires.findIndex(p => p.id === editingId);
+                prestataires[index] = vendor;
             } else {
-                clients.push(client);
+                prestataires.push(vendor);
             }
 
-            allData.clients = clients;
+            allData.prestataires = prestataires;
             localStorage.setItem('goldenpromise_data', JSON.stringify(allData));
             
             renderTable();
             closeModal();
         });
 
-        function editClient(id) {
-            const client = clients.find(c => c.id === id);
-            openModal(client);
-        }
-
-        function deleteClient(id) {
-            if (confirm(t[currentLang].delete_confirm)) {
-                clients = clients.filter(c => c.id !== id);
-                allData.clients = clients;
-                localStorage.setItem('goldenpromise_data', JSON.stringify(allData));
-                renderTable();
-            }
-        }
-
+        // BOUTON EXPORT CSV
         function exportCSV() {
-            let csv = 'ID;Nom;Partenaire;Email;Téléphone;Date Mariage;Budget;Statut\n';
-            clients.forEach(c => {
-                csv += `${c.id};${c.nom};${c.partenaire};${c.email};${c.tel};${c.dateMariage};${c.budget};${c.statut}\n`;
+            let csv = 'ID;Nom;Catégorie;Téléphone;Email;Note\n';
+            prestataires.forEach(p => {
+                csv += `${p.id};${p.nom};${categorieNoms[p.categorie] || ''};${p.tel};${p.email};${p.note}\n`;
             });
             const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'clients.csv';
+            a.download = 'prestataires.csv';
             a.click();
             URL.revokeObjectURL(url);
         }
 
+        // BARRE DE RECHERCHE
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = clients.filter(c => 
-                c.nom.toLowerCase().includes(term) || 
-                c.email.toLowerCase().includes(term) ||
-                c.partenaire.toLowerCase().includes(term)
-            );
-            renderTable(filtered);
+            const rows = document.querySelectorAll('#prestatairesTable tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
         });
+
+        // Fermer modal en cliquant en dehors
+        window.onclick = function(event) {
+            const modal = document.getElementById('vendorModal');
+            const detailsModal = document.getElementById('detailsModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+            if (event.target == detailsModal) {
+                closeDetailsModal();
+            }
+        }
 
         renderTable();
     </script>
 
-    <!-- SCRIPT TRADUCTION -->
     <script>
     let currentLang = 'fr';
     
@@ -540,41 +636,35 @@
         fr: {
             dashboard: "Tableau de bord", clients: "Clients", mariages: "Mariages",
             prestataires: "Prestataires", paiements: "Paiements", messages: "Messages",
-            logout: "Déconnexion", clients_title: "Gestion des Clients",
-            clients_subtitle: "Liste complète de vos futurs mariés",
-            search: "Rechercher un client...", add_client: "Ajouter Client",
-            export: "Export CSV", id: "ID", name: "Nom & Couple", email: "Email",
-            phone: "Téléphone", date: "Date Mariage", budget: "Budget",
-            status: "Statut", actions: "Actions", add_title: "Ajouter un Client",
-            edit_title: "Modifier Client", name_label: "Nom", partner: "Partenaire",
-            save: "Enregistrer", cancel: "Annuler",
-            delete_confirm: "Voulez-vous vraiment supprimer ce client ?"
+            logout: "Déconnexion", prestataires_title: "Gestion des Prestataires",
+            prestataires_subtitle: "Liste de vos partenaires",
+            search: "Rechercher...", add_vendor: "Ajouter Prestataire", export: "Export CSV",
+            id: "ID", name: "Nom", category: "Catégorie", phone: "Téléphone",
+            email: "Email", rating: "Note", actions: "Actions",
+            add_vendor_title: "Ajouter un Prestataire", save: "Enregistrer", cancel: "Annuler",
+            vendor_details: "📋 Détails du Prestataire", close: "Fermer"
         },
         en: {
             dashboard: "Dashboard", clients: "Clients", mariages: "Weddings",
             prestataires: "Vendors", paiements: "Payments", messages: "Messages",
-            logout: "Logout", clients_title: "Client Management",
-            clients_subtitle: "Complete list of your future couples",
-            search: "Search client...", add_client: "Add Client",
-            export: "Export CSV", id: "ID", name: "Name & Couple", email: "Email",
-            phone: "Phone", date: "Wedding Date", budget: "Budget",
-            status: "Status", actions: "Actions", add_title: "Add Client",
-            edit_title: "Edit Client", name_label: "Name", partner: "Partner",
-            save: "Save", cancel: "Cancel",
-            delete_confirm: "Do you really want to delete this client?"
+            logout: "Logout", prestataires_title: "Vendor Management",
+            prestataires_subtitle: "List of your partners",
+            search: "Search...", add_vendor: "Add Vendor", export: "Export CSV",
+            id: "ID", name: "Name", category: "Category", phone: "Phone",
+            email: "Email", rating: "Rating", actions: "Actions",
+            add_vendor_title: "Add Vendor", save: "Save", cancel: "Cancel",
+            vendor_details: "📋 Vendor Details", close: "Close"
         },
         ar: {
             dashboard: "لوحة القيادة", clients: "العملاء", mariages: "حفلات الزفاف",
             prestataires: "مقدمو الخدمات", paiements: "المدفوعات", messages: "الرسائل",
-            logout: "تسجيل الخروج", clients_title: "إدارة العملاء",
-            clients_subtitle: "قائمة كاملة بأزواجك المستقبليين",
-            search: "البحث عن عميل...", add_client: "إضافة عميل",
-            export: "تصدير CSV", id: "المعرف", name: "الاسم والزوجين", email: "البريد الإلكتروني",
-            phone: "الهاتف", date: "تاريخ الزفاف", budget: "الميزانية",
-            status: "الحالة", actions: "الإجراءات", add_title: "إضافة عميل",
-            edit_title: "تعديل العميل", name_label: "الاسم", partner: "الشريك",
-            save: "حفظ", cancel: "إلغاء",
-            delete_confirm: "هل تريد حقًا حذف هذا العميل؟"
+            logout: "تسجيل الخروج", prestataires_title: "إدارة مقدمي الخدمات",
+            prestataires_subtitle: "قائمة شركائك",
+            search: "بحث...", add_vendor: "إضافة مقدم خدمة", export: "تصدير CSV",
+            id: "المعرف", name: "الاسم", category: "الفئة", phone: "الهاتف",
+            email: "البريد الإلكتروني", rating: "التقييم", actions: "الإجراءات",
+            add_vendor_title: "إضافة مقدم خدمة", save: "حفظ", cancel: "إلغاء",
+            vendor_details: "📋 تفاصيل مقدم الخدمة", close: "إغلاق"
         }
     };
 

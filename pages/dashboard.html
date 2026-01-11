@@ -3,253 +3,788 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Golden Promise</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- 🔥 CHART.JS CDN -->
+    <title>Dashboard | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Georgia', serif; 
-            background: #F5F0EB; 
-            color: #2B3A2F;
-            display: flex; margin-top: 120px; /* Navbar + Sidebar */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
         }
-        
-        /* 🔥 NAVBAR HAUT */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: #5A6B4D; padding: 15px 40px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        nav .logo { color: white; font-size: 24px; font-weight: bold; }
-        nav select, nav button { 
-            padding: 8px 12px; border: none; border-radius: 6px; 
-            background: rgba(255,255,255,0.1); color: white; cursor: pointer;
-        }
-        nav button { background: #dc3545; padding: 12px 24px; font-weight: 500; }
-        
         .sidebar {
-            width: 280px; background: #5A6B4D; height: 100vh; position: fixed;
-            color: white; padding: 30px 0;
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
         }
-        .logo-section { padding: 0 30px 30px; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .logo-section h2 { font-size: 20px; color: #9AB396; letter-spacing: 2px; text-transform: uppercase; }
-        .menu-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px 20px;
-            color: #E5DED5; border-radius: 8px; margin-bottom: 5px; cursor: pointer;
-            font-size: 14px; transition: all 0.3s;
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
         }
-        .menu-item:hover { background: rgba(154,179,150,0.2); color: white; }
-        .menu-item.active { background: rgba(154,179,150,0.3); }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+        }
         
-        .main-content { margin-left: 280px; flex: 1; padding: 40px; }
-        .header {
-            background: white; padding: 30px; border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 30px; text-align: center;
+        /* Filtres et Actions */
+        .filters-bar {
+            background: var(--white);
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        .header h1 { font-size: 32px; color: #5A6B4D; font-weight: 300; }
         
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-group label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 15px;
+            border: 2px solid rgba(197, 160, 89, 0.2);
+            border-radius: 50px;
+            outline: none;
+            font-size: 0.85rem;
+            min-width: 150px;
+        }
+        
+        .action-buttons {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            background: var(--rose-gold);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        /* Stats Cards */
         .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; margin-bottom: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
         .stat-card {
-            background: white; padding: 30px; border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 4px solid #9AB396;
-            text-align: center;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
-        .stat-number { font-size: 36px; font-weight: bold; color: #5A6B4D; }
-        .stat-label { font-size: 14px; color: #9B8B7E; letter-spacing: 1px; margin-top: 8px; }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .stat-icon.clients { background: rgba(197, 160, 89, 0.1); color: var(--rose-gold); }
+        .stat-icon.weddings { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .stat-icon.revenue { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+        .stat-icon.payments { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
         
-        /* 🔥 5 GRAPHIQUES */
+        .stat-content h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        .stat-content p {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        /* Charts */
         .charts-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px; margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 40px;
         }
+        
         .chart-card {
-            background: white; padding: 25px; border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            height: 350px;
         }
-        .chart-card h3 {
-            color: #5A6B4D; margin-bottom: 20px; font-size: 18px; text-align: center;
+        
+        .chart-card h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text);
         }
-        .btn-primary {
-            padding: 6px 12px; background: #9AB396; color: white; border: none;
-            border-radius: 6px; cursor: pointer; font-size: 11px;
+        
+        .chart-card canvas {
+            max-height: 280px !important;
+        }
+        
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* RTL Support */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+        body[dir="rtl"] .stat-card {
+            flex-direction: row-reverse;
+        }
+        body[dir="rtl"] .filters-bar {
+            flex-direction: row-reverse;
         }
     </style>
 </head>
 <body>
-    <!-- 🔥 NAVBAR -->
-    <nav>
-        <div class="logo">💍 GOLDEN PROMISE</div>
-        <div>
-            <select>
-                <option>🇫🇷 FR</option>
-                <option>🇲🇦 AR</option>
-                <option>🇺🇸 EN</option>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <!-- SÉLECTEUR DE LANGUE -->
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
             </select>
-            <button onclick="logout()">🚪 Déconnexion</button>
-        </div>
-    </nav>
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo-section"><h2>GOLDEN PROMISE</h2></div>
-        <div class="menu-item active"><span>📊</span><span>Dashboard</span></div>
-        <div class="menu-item" onclick="window.location.href='clients.html'"><span>👥</span><span>Clients</span></div>
-        <div class="menu-item" onclick="window.location.href='weddings.html'"><span>💒</span><span>Mariages</span></div>
-        <div class="menu-item" onclick="window.location.href='vendors.html'"><span>🏢</span><span>Prestataires</span></div>
-        <div class="menu-item" onclick="window.location.href='services.html'"><span>⚙️</span><span>Services</span></div>
-        <div class="menu-item" onclick="window.location.href='payments.html'"><span>💰</span><span>Paiements</span></div>
-    </aside>
-
-    <main class="main-content">
-        <div class="header">
-            <h1><i class="fas fa-tachometer-alt"></i> Dashboard Golden Promise</h1>
-            <p>Bienvenue, <strong id="userName">Sarah</strong></p>
         </div>
 
-        <!-- STATS -->
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="dashboard.html" class="menu-link active">
+                    <i class="fas fa-chart-line"></i> 
+                    <span data-i18n="dashboard">Tableau de bord</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="clients.html" class="menu-link">
+                    <i class="fas fa-users"></i> 
+                    <span data-i18n="clients">Clients</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="mariages.html" class="menu-link">
+                    <i class="fas fa-heart"></i> 
+                    <span data-i18n="mariages">Mariages</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="prestataires.html" class="menu-link">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="prestataires">Prestataires</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="paiements.html" class="menu-link">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="paiements">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="messages.html" class="menu-link">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+        </ul>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div>
+                <h1 data-i18n="dashboard_title">Tableau de bord</h1>
+                <p data-i18n="dashboard_subtitle">Vue d'ensemble de votre activité</p>
+            </div>
+        </header>
+
+        <!-- FILTRES ET ACTIONS -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label data-i18n="filter_period">Période</label>
+                <select id="periodFilter" onchange="applyFilters()">
+                    <option value="all">Tout</option>
+                    <option value="today">Aujourd'hui</option>
+                    <option value="week">Cette semaine</option>
+                    <option value="month">Ce mois</option>
+                    <option value="year" selected>Cette année</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label data-i18n="filter_status">Statut</label>
+                <select id="statusFilter" onchange="applyFilters()">
+                    <option value="all">Tous</option>
+                    <option value="actif">Actif</option>
+                    <option value="attente">En attente</option>
+                    <option value="annule">Annulé</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label data-i18n="filter_date">Date de/à</label>
+                <input type="date" id="dateFrom" onchange="applyFilters()">
+            </div>
+
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <input type="date" id="dateTo" onchange="applyFilters()">
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i>
+                    <span data-i18n="reset">Réinitialiser</span>
+                </button>
+                <button class="btn btn-secondary" onclick="exportPDF()">
+                    <i class="fas fa-file-pdf"></i>
+                    <span data-i18n="export_pdf">Export PDF</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- STATS CARDS -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="totalClients">3</div>
-                <div class="stat-label">Clients</div>
+                <div class="stat-icon clients">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 data-i18n="active_clients">Clients Actifs</h3>
+                    <p id="totalClients">0</p>
+                </div>
             </div>
+
             <div class="stat-card">
-                <div class="stat-number" id="totalWeddings">3</div>
-                <div class="stat-label">Mariages</div>
+                <div class="stat-icon weddings">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 data-i18n="upcoming_weddings">Mariages à venir</h3>
+                    <p id="upcomingWeddings">0</p>
+                </div>
             </div>
+
             <div class="stat-card">
-                <div class="stat-number" id="totalVendors">4</div>
-                <div class="stat-label">Prestataires</div>
+                <div class="stat-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 data-i18n="total_revenue">Revenu Total</h3>
+                    <p id="totalRevenue">0 MAD</p>
+                </div>
             </div>
+
             <div class="stat-card">
-                <div class="stat-number" id="totalRevenue">16,700€</div>
-                <div class="stat-label">Chiffre d'affaires</div>
+                <div class="stat-icon payments">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 data-i18n="pending_payments">Paiements en attente</h3>
+                    <p id="pendingPayments">0</p>
+                </div>
             </div>
         </div>
 
-        <!-- 🔥 5 GRAPHIQUES CHART.JS -->
-        <div class="charts-grid">
+        <!-- CHARTS -->
+        <div class="charts-grid" id="chartsContainer">
             <div class="chart-card">
-                <h3>Statut Paiements</h3>
-                <canvas id="paymentsChart"></canvas>
+                <h2 data-i18n="clients_by_status">Clients par Statut</h2>
+                <canvas id="statusChart"></canvas>
             </div>
+
             <div class="chart-card">
-                <h3>Mariages par Mois</h3>
+                <h2 data-i18n="weddings_by_month">Mariages par Mois</h2>
                 <canvas id="weddingsChart"></canvas>
             </div>
+
             <div class="chart-card">
-                <h3>Services Vendus</h3>
-                <canvas id="servicesChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>Prestataires par Catégorie</h3>
-                <canvas id="vendorsChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>Évolution Revenus</h3>
+                <h2 data-i18n="monthly_revenue">Revenus Mensuels</h2>
                 <canvas id="revenueChart"></canvas>
             </div>
+
+            <div class="chart-card">
+                <h2 data-i18n="budget_distribution">Répartition des Budgets</h2>
+                <canvas id="budgetChart"></canvas>
+            </div>
+
+            <div class="chart-card full-width">
+                <h2 data-i18n="clients_evolution">Évolution des Clients (2026)</h2>
+                <canvas id="evolutionChart"></canvas>
+            </div>
         </div>
-    </main>
+    </div>
 
-    <!-- 🔥 SCRIPT GRAPHIQUES + FONCTIONS -->
     <script>
-        // 🔐 AUTH
-        if (localStorage.getItem('isLoggedIn') !== 'true') {
-            window.location.href = 'index.html';
-        }
-        document.getElementById('userName').textContent = 
-            (localStorage.getItem('userEmail') || 'Sarah').split('@')[0];
-
-        // 🚪 LOGOUT
         function logout() {
-            localStorage.clear();
             window.location.href = 'index.html';
         }
 
-        // 🔥 5 GRAPHIQUES CHART.JS
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. Doughnut - Statut Paiements
-            new Chart(document.getElementById('paymentsChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Validé', 'En attente', 'Échéance', 'Retard'],
-                    datasets: [{ 
-                        data: [12, 5, 3, 2], 
-                        backgroundColor: ['#10b981', '#F4B400', '#F97316', '#dc3545'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
+        // Récupérer les données
+        let allData = JSON.parse(localStorage.getItem('goldenpromise_data') || '{}');
+        let allClients = allData.clients || [];
+        let filteredClients = [...allClients];
+
+        // Variables pour les graphiques
+        let charts = {};
+
+        // Fonction de filtrage
+        function applyFilters() {
+            const period = document.getElementById('periodFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+
+            filteredClients = allClients.filter(client => {
+                // Filtre par statut
+                if (status !== 'all' && client.statut !== status) return false;
+
+                // Filtre par date
+                const clientDate = new Date(client.dateMariage);
+                if (dateFrom && clientDate < new Date(dateFrom)) return false;
+                if (dateTo && clientDate > new Date(dateTo)) return false;
+
+                // Filtre par période
+                const today = new Date();
+                if (period === 'today') {
+                    return clientDate.toDateString() === today.toDateString();
+                } else if (period === 'week') {
+                    const weekAgo = new Date(today.setDate(today.getDate() - 7));
+                    return clientDate >= weekAgo;
+                } else if (period === 'month') {
+                    return clientDate.getMonth() === today.getMonth() && 
+                           clientDate.getFullYear() === today.getFullYear();
+                } else if (period === 'year') {
+                    return clientDate.getFullYear() === today.getFullYear();
+                }
+
+                return true;
             });
 
-            // 2. Bar - Mariages par Mois
-            new Chart(document.getElementById('weddingsChart'), {
+            updateStats();
+            updateCharts();
+        }
+
+        // Réinitialiser les filtres
+        function resetFilters() {
+            document.getElementById('periodFilter').value = 'year';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            filteredClients = [...allClients];
+            updateStats();
+            updateCharts();
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('totalClients').textContent = filteredClients.length;
+            document.getElementById('upcomingWeddings').textContent = filteredClients.filter(c => c.statut === 'actif').length;
+            
+            const totalBudget = filteredClients.reduce((sum, c) => sum + (c.budget || 0), 0);
+            document.getElementById('totalRevenue').textContent = totalBudget.toLocaleString() + ' MAD';
+            
+            document.getElementById('pendingPayments').textContent = filteredClients.filter(c => c.statut === 'attente').length;
+        }
+
+        // Créer les graphiques
+        function createCharts() {
+            // Graphique 1 : Clients par Statut
+            charts.status = new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Actif', 'En attente', 'Annulé'],
+                    datasets: [{
+                        data: [
+                            filteredClients.filter(c => c.statut === 'actif').length,
+                            filteredClients.filter(c => c.statut === 'attente').length,
+                            filteredClients.filter(c => c.statut === 'annule').length
+                        ],
+                        backgroundColor: ['#c5a059', '#F59E0B', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.5,
+                    plugins: {
+                        legend: { 
+                            position: 'bottom',
+                            labels: { boxWidth: 15, padding: 10, font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+
+            // Graphique 2 : Revenus Mensuels
+            charts.revenue = new Chart(document.getElementById('revenueChart'), {
                 type: 'bar',
                 data: {
-                    labels: ['Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin'],
-                    datasets: [{ 
-                        label: 'Mariages', 
-                        data: [2, 3, 1, 4, 2, 5], 
-                        backgroundColor: '#9AB396',
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Revenus (MAD)',
+                        data: [120000, 190000, 150000, 220000, 180000, 250000],
+                        backgroundColor: 'rgba(197, 160, 89, 0.7)',
                         borderRadius: 8
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.5,
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { callback: value => value/1000 + 'k' }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
             });
 
-            // 3. Pie - Services Vendus
-            new Chart(document.getElementById('servicesChart'), {
-                type: 'pie',
-                data: {
-                    labels: ['Premium', 'Standard', 'Light'],
-                    datasets: [{ 
-                        data: [8, 15, 7], 
-                        backgroundColor: ['#9AB396', '#F4B400', '#5A6B4D']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            // 4. PolarArea - Prestataires
-            new Chart(document.getElementById('vendorsChart'), {
-                type: 'polarArea',
-                data: {
-                    labels: ['Traiteur', 'Photo', 'Fleurs', 'DJ'],
-                    datasets: [{ 
-                        data: [10, 8, 6, 4], 
-                        backgroundColor: ['rgba(244,180,0,0.6)', 'rgba(154,179,150,0.6)', 'rgba(90,107,77,0.6)', 'rgba(220,53,69,0.6)']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            // 5. Line - Évolution Revenus
-            new Chart(document.getElementById('revenueChart'), {
+            // Graphique 3 : Mariages par Mois
+            charts.weddings = new Chart(document.getElementById('weddingsChart'), {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Fév', 'Mars', 'Avr'],
-                    datasets: [{ 
-                        label: 'Revenus €', 
-                        data: [15000, 22000, 18000, 28000], 
-                        borderColor: '#9AB396', 
-                        backgroundColor: 'rgba(154,179,150,0.2)',
-                        fill: true,
-                        tension: 0.4
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû'],
+                    datasets: [{
+                        label: 'Mariages',
+                        data: [2, 5, 3, 8, 6, 10, 12, 9],
+                        borderColor: '#c5a059',
+                        backgroundColor: 'rgba(197, 160, 89, 0.1)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 4
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.5,
+                    plugins: { legend: { display: false } }
+                }
             });
-        });
+
+            // Graphique 4 : Distribution des Budgets
+            charts.budget = new Chart(document.getElementById('budgetChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['< 200k MAD', '200-350k MAD', '> 350k MAD'],
+                    datasets: [{
+                        data: [
+                            filteredClients.filter(c => c.budget < 200000).length,
+                            filteredClients.filter(c => c.budget >= 200000 && c.budget < 350000).length,
+                            filteredClients.filter(c => c.budget >= 350000).length
+                        ],
+                        backgroundColor: ['#22c55e', '#c5a059', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.5,
+                    plugins: {
+                        legend: { 
+                            position: 'bottom',
+                            labels: { boxWidth: 15, padding: 10, font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+
+            // Graphique 5 : Évolution des Clients
+            charts.evolution = new Chart(document.getElementById('evolutionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+                    datasets: [{
+                        label: 'Nouveaux Clients',
+                        data: [5, 8, 12, 15, 18, 22, 28, 25, 30, 35, 40, 45],
+                        borderColor: '#c5a059',
+                        backgroundColor: 'rgba(197, 160, 89, 0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 3,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 10 } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // Mettre à jour les graphiques
+        function updateCharts() {
+            // Mettre à jour graphique statuts
+            charts.status.data.datasets[0].data = [
+                filteredClients.filter(c => c.statut === 'actif').length,
+                filteredClients.filter(c => c.statut === 'attente').length,
+                filteredClients.filter(c => c.statut === 'annule').length
+            ];
+            charts.status.update();
+
+            // Mettre à jour graphique budgets
+            charts.budget.data.datasets[0].data = [
+                filteredClients.filter(c => c.budget < 200000).length,
+                filteredClients.filter(c => c.budget >= 200000 && c.budget < 350000).length,
+                filteredClients.filter(c => c.budget >= 350000).length
+            ];
+            charts.budget.update();
+        }
+
+        // Export PDF
+        async function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            // Titre
+            pdf.setFontSize(20);
+            pdf.text('Golden Promise - Dashboard', 105, 20, { align: 'center' });
+            
+            pdf.setFontSize(12);
+            pdf.text(`Date: ${new Date().toLocaleDateString('fr-FR')}`, 20, 35);
+            
+            // Stats
+            pdf.setFontSize(14);
+            pdf.text('Statistiques:', 20, 50);
+            
+            pdf.setFontSize(11);
+            pdf.text(`Clients Actifs: ${filteredClients.length}`, 20, 60);
+            pdf.text(`Mariages à venir: ${filteredClients.filter(c => c.statut === 'actif').length}`, 20, 70);
+            
+            const totalBudget = filteredClients.reduce((sum, c) => sum + (c.budget || 0), 0);
+            pdf.text(`Revenu Total: ${totalBudget.toLocaleString()} MAD`, 20, 80);
+            pdf.text(`Paiements en attente: ${filteredClients.filter(c => c.statut === 'attente').length}`, 20, 90);
+            
+            // Capture des graphiques
+            const canvas = await html2canvas(document.getElementById('chartsContainer'));
+            const imgData = canvas.toDataURL('image/png');
+            pdf.addImage(imgData, 'PNG', 10, 100, 190, 150);
+            
+            // Télécharger
+            pdf.save(`golden-promise-dashboard-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        // Initialiser
+        updateStats();
+        createCharts();
     </script>
+
+    <!-- SCRIPT TRADUCTION -->
+    <script>
+    let currentLang = 'fr';
+    
+    const t = {
+        fr: {
+            dashboard: "Tableau de bord", clients: "Clients", mariages: "Mariages",
+            prestataires: "Prestataires", paiements: "Paiements", messages: "Messages",
+            logout: "Déconnexion", dashboard_title: "Tableau de bord",
+            dashboard_subtitle: "Vue d'ensemble de votre activité",
+            active_clients: "Clients Actifs", upcoming_weddings: "Mariages à venir",
+            total_revenue: "Revenu Total", pending_payments: "Paiements en attente",
+            clients_by_status: "Clients par Statut", monthly_revenue: "Revenus Mensuels",
+            weddings_by_month: "Mariages par Mois", budget_distribution: "Répartition des Budgets",
+            clients_evolution: "Évolution des Clients (2026)",
+            filter_period: "Période", filter_status: "Statut", filter_date: "Date de/à",
+            reset: "Réinitialiser", export_pdf: "Export PDF"
+        },
+        en: {
+            dashboard: "Dashboard", clients: "Clients", mariages: "Weddings",
+            prestataires: "Vendors", paiements: "Payments", messages: "Messages",
+            logout: "Logout", dashboard_title: "Dashboard",
+            dashboard_subtitle: "Overview of your activity",
+            active_clients: "Active Clients", upcoming_weddings: "Upcoming Weddings",
+            total_revenue: "Total Revenue", pending_payments: "Pending Payments",
+            clients_by_status: "Clients by Status", monthly_revenue: "Monthly Revenue",
+            weddings_by_month: "Weddings by Month", budget_distribution: "Budget Distribution",
+            clients_evolution: "Client Evolution (2026)",
+            filter_period: "Period", filter_status: "Status", filter_date: "Date from/to",
+            reset: "Reset", export_pdf: "Export PDF"
+        },
+        ar: {
+            dashboard: "لوحة القيادة", clients: "العملاء", mariages: "حفلات الزفاف",
+            prestataires: "مقدمو الخدمات", paiements: "المدفوعات", messages: "الرسائل",
+            logout: "تسجيل الخروج", dashboard_title: "لوحة القيادة",
+            dashboard_subtitle: "نظرة عامة على نشاطك",
+            active_clients: "العملاء النشطون", upcoming_weddings: "حفلات الزفاف القادمة",
+            total_revenue: "الإيرادات الإجمالية", pending_payments: "المدفوعات المعلقة",
+            clients_by_status: "العملاء حسب الحالة", monthly_revenue: "الإيرادات الشهرية",
+            weddings_by_month: "الزفاف حسب الشهر", budget_distribution: "توزيع الميزانية",
+            clients_evolution: "تطور العملاء (2026)",
+            filter_period: "الفترة", filter_status: "الحالة", filter_date: "التاريخ من/إلى",
+            reset: "إعادة تعيين", export_pdf: "تصدير PDF"
+        }
+    };
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+        document.documentElement.lang = lang;
+        document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[lang] && t[lang][key]) {
+                if (el.placeholder !== undefined) el.placeholder = t[lang][key];
+                else el.textContent = t[lang][key];
+            }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const lang = localStorage.getItem('lang') || 'fr';
+        currentLang = lang;
+        setLang(lang);
+        const sel = document.getElementById('langSelect');
+        if (sel) sel.value = lang;
+    });
+    </script>
+
 </body>
 </html>
-
-
-

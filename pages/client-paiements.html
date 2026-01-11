@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Paiements | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .client-info {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .client-info h3 {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 5px;
+        }
+        .client-info p {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .payment-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .payment-card h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--rose-gold);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(197, 160, 89, 0.2);
+            border-radius: 12px;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0070ba, #003087);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-pay:hover { opacity: 0.9; }
+        .payment-summary {
+            background: var(--silk);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .summary-label {
+            color: #777;
+        }
+        .summary-value {
+            font-weight: 600;
+        }
+        .summary-total {
+            padding-top: 15px;
+            border-top: 2px solid rgba(197, 160, 89, 0.3);
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+        }
+        .history-table {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .history-table h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 15px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--rose-gold);
+            border-bottom: 2px solid var(--silk);
+        }
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .btn-receipt {
+            padding: 8px 15px;
+            background: var(--rose-gold);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .btn-receipt:hover { opacity: 0.9; }
+        
+        .receipt-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .receipt-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--silk);
+        }
+        .receipt-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--rose-gold);
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--silk);
+        }
+        .receipt-label {
+            font-weight: 600;
+        }
+        .receipt-total {
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            font-weight: 600;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .receipt-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn-print, .btn-close {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-print {
+            background: var(--rose-gold);
+            color: white;
+        }
+        .btn-close {
+            background: #ddd;
+            color: var(--text);
+        }
+        
+        /* RTL Support */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+        body[dir="rtl"] th {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
+            </select>
+        </div>
+        
+        <div class="client-info">
+            <h3 id="clientName"></h3>
+            <p id="weddingDate"></p>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="client-dashboard.html" class="menu-link">
+                    <i class="fas fa-home"></i> 
+                    <span data-i18n="home">Accueil</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-services.html" class="menu-link">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="my_services">Mes Services</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-planning.html" class="menu-link">
+                    <i class="fas fa-calendar"></i> 
+                    <span data-i18n="planning">Planning</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-paiements.html" class="menu-link active">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="payments">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-messages.html" class="menu-link">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+        </ul>
+        <li class="menu-item">
+    <a href="client-profil.html" class="menu-link">
+        <i class="fas fa-user-circle"></i> 
+        <span data-i18n="my_profile">Mon Profil</span>
+    </a>
+</li>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 data-i18n="payments_title">Mes Paiements</h1>
+            <p data-i18n="payments_subtitle">Gérez vos transactions et reçus</p>
+        </header>
+
+        <div class="payment-grid">
+            <div class="payment-card">
+                <h2 data-i18n="new_payment">Nouveau Paiement</h2>
+                <div class="payment-summary">
+                    <div class="summary-row">
+                        <span class="summary-label" data-i18n="total_budget">Budget Total</span>
+                        <span class="summary-value" id="budgetTotal">0 MAD</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label" data-i18n="already_paid">Déjà Payé</span>
+                        <span class="summary-value">85 000 MAD</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span class="summary-label" data-i18n="remaining">Restant à Payer</span>
+                        <span class="summary-value" id="remainingAmount">0 MAD</span>
+                    </div>
+                </div>
+
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label data-i18n="service_to_pay">Service à Payer</label>
+                        <select id="service" required>
+                            <option value="" data-i18n="select_service">Sélectionner un service</option>
+                            <option value="fleurs">Décoration Florale - 15 000 MAD</option>
+                            <option value="traiteur">Traiteur Royal - 52 500 MAD</option>
+                            <option value="photo">Photographie - 12 000 MAD</option>
+                            <option value="dj">Animation DJ - 8 000 MAD</option>
+                            <option value="cake">Wedding Cake - 4 500 MAD</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="amount">Montant (MAD)</label>
+                        <input type="number" id="amount" data-i18n-placeholder="enter_amount" placeholder="Entrez le montant" required>
+                    </div>
+
+                    <button type="submit" class="btn-pay">
+                        <i class="fab fa-paypal"></i> 
+                        <span data-i18n="pay_paypal">Payer avec PayPal</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="payment-card">
+                <h2 data-i18n="how_to_pay">Comment Payer ?</h2>
+                <div style="line-height: 1.8; color: #777;">
+                    <p style="margin-bottom: 20px;">
+                        <strong style="color: var(--text);" data-i18n="step1_title">1. Sélectionnez le service</strong><br>
+                        <span data-i18n="step1_desc">Choisissez le prestataire que vous souhaitez payer.</span>
+                    </p>
+                    <p style="margin-bottom: 20px;">
+                        <strong style="color: var(--text);" data-i18n="step2_title">2. Entrez le montant</strong><br>
+                        <span data-i18n="step2_desc">Indiquez le montant à régler (acompte ou solde).</span>
+                    </p>
+                    <p style="margin-bottom: 20px;">
+                        <strong style="color: var(--text);" data-i18n="step3_title">3. Payez via PayPal</strong><br>
+                        <span data-i18n="step3_desc">Vous serez redirigé vers PayPal pour finaliser le paiement de manière sécurisée.</span>
+                    </p>
+                    <p>
+                        <strong style="color: var(--text);" data-i18n="step4_title">4. Recevez votre reçu</strong><br>
+                        <span data-i18n="step4_desc">Un reçu sera automatiquement généré et disponible dans l'historique.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-table">
+            <h2 data-i18n="history_title">Historique des Paiements</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="date">Date</th>
+                        <th data-i18n="service">Service</th>
+                        <th data-i18n="amount">Montant</th>
+                        <th data-i18n="method">Méthode</th>
+                        <th data-i18n="receipt">Reçu</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable">
+                    <tr>
+                        <td>2026-01-05</td>
+                        <td>Décoration Florale</td>
+                        <td>15 000 MAD</td>
+                        <td>PayPal</td>
+                        <td><button class="btn-receipt" onclick="viewReceipt('Décoration Florale', 15000, '2026-01-05', 'PP001')"><span data-i18n="view">Voir</span></button></td>
+                    </tr>
+                    <tr>
+                        <td>2025-12-20</td>
+                        <td>Traiteur Royal (Acompte)</td>
+                        <td>30 000 MAD</td>
+                        <td>PayPal</td>
+                        <td><button class="btn-receipt" onclick="viewReceipt('Traiteur Royal', 30000, '2025-12-20', 'PP002')"><span data-i18n="view">Voir</span></button></td>
+                    </tr>
+                    <tr>
+                        <td>2025-12-10</td>
+                        <td>Photographie</td>
+                        <td>12 000 MAD</td>
+                        <td>PayPal</td>
+                        <td><button class="btn-receipt" onclick="viewReceipt('Photographie', 12000, '2025-12-10', 'PP003')"><span data-i18n="view">Voir</span></button></td>
+                    </tr>
+                    <tr>
+                        <td>2025-11-28</td>
+                        <td>Location Palais</td>
+                        <td>28 000 MAD</td>
+                        <td>PayPal</td>
+                        <td><button class="btn-receipt" onclick="viewReceipt('Location Palais', 28000, '2025-11-28', 'PP004')"><span data-i18n="view">Voir</span></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODAL REÇU -->
+    <div id="receiptModal" class="receipt-modal">
+        <div class="receipt-content" id="receiptPrint">
+            <div class="receipt-header">
+                <h1>Golden Promise</h1>
+                <p style="color: var(--rose-gold); font-family: 'Parisienne', cursive; font-size: 1.5rem;">Wedding Planner</p>
+                <p style="color: #777; margin-top: 10px;">Casablanca, Maroc</p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h3 style="color: var(--rose-gold); margin-bottom: 15px;" data-i18n="payment_receipt">REÇU DE PAIEMENT</h3>
+                <div class="receipt-row">
+                    <span class="receipt-label" data-i18n="transaction_num">N° Transaction</span>
+                    <span id="receiptId"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label" data-i18n="date">Date</span>
+                    <span id="receiptDate"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label" data-i18n="client">Client</span>
+                    <span id="receiptClient"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label" data-i18n="service">Service</span>
+                    <span id="receiptService"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label" data-i18n="method">Méthode</span>
+                    <span>PayPal</span>
+                </div>
+                <div class="receipt-total">
+                    <span data-i18n="total">Total</span>: <span id="receiptAmount"></span> MAD
+                </div>
+            </div>
+
+            <div style="text-align: center; color: #777; font-size: 0.85rem; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--silk);">
+                <span data-i18n="thank_you">Merci pour votre confiance !</span><br>
+                Golden Promise - contact@goldenpromise.ma
+            </div>
+
+            <div class="receipt-actions">
+                <button class="btn-print" onclick="printReceipt()">
+                    <i class="fas fa-print"></i> <span data-i18n="print">Imprimer</span>
+                </button>
+                <button class="btn-close" onclick="closeReceipt()">
+                    <span data-i18n="close">Fermer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'fr';
+        
+        const t = {
+            fr: {
+                home: "Accueil", my_services: "Mes Services", planning: "Planning", payments: "Paiements", messages: "Messages",
+                logout: "Déconnexion", payments_title: "Mes Paiements", payments_subtitle: "Gérez vos transactions et reçus",
+                new_payment: "Nouveau Paiement", total_budget: "Budget Total", already_paid: "Déjà Payé", remaining: "Restant à Payer",
+                service_to_pay: "Service à Payer", select_service: "Sélectionner un service", amount: "Montant (MAD)",
+                enter_amount: "Entrez le montant", pay_paypal: "Payer avec PayPal", how_to_pay: "Comment Payer ?",
+                step1_title: "1. Sélectionnez le service", step1_desc: "Choisissez le prestataire que vous souhaitez payer.",
+                step2_title: "2. Entrez le montant", step2_desc: "Indiquez le montant à régler (acompte ou solde).",
+                step3_title: "3. Payez via PayPal", step3_desc: "Vous serez redirigé vers PayPal pour finaliser le paiement de manière sécurisée.",
+                step4_title: "4. Recevez votre reçu", step4_desc: "Un reçu sera automatiquement généré et disponible dans l'historique.",
+                history_title: "Historique des Paiements", date: "Date", service: "Service", method: "Méthode", receipt: "Reçu",
+                view: "Voir", payment_receipt: "REÇU DE PAIEMENT", transaction_num: "N° Transaction", client: "Client",
+                total: "Total", thank_you: "Merci pour votre confiance !", print: "Imprimer", close: "Fermer",
+                wedding_on: "Mariage le", redirect_paypal: "Redirection vers PayPal...", payment_success: "Paiement effectué avec succès !"
+            },
+            en: {
+                home: "Home", my_services: "My Services", planning: "Planning", payments: "Payments", messages: "Messages",
+                logout: "Logout", payments_title: "My Payments", payments_subtitle: "Manage your transactions and receipts",
+                new_payment: "New Payment", total_budget: "Total Budget", already_paid: "Already Paid", remaining: "Remaining",
+                service_to_pay: "Service to Pay", select_service: "Select a service", amount: "Amount (MAD)",
+                enter_amount: "Enter amount", pay_paypal: "Pay with PayPal", how_to_pay: "How to Pay?",
+                step1_title: "1. Select the service", step1_desc: "Choose the vendor you want to pay.",
+                step2_title: "2. Enter the amount", step2_desc: "Indicate the amount to pay (deposit or balance).",
+                step3_title: "3. Pay via PayPal", step3_desc: "You will be redirected to PayPal to complete the payment securely.",
+                step4_title: "4. Receive your receipt", step4_desc: "A receipt will be automatically generated and available in history.",
+                history_title: "Payment History", date: "Date", service: "Service", method: "Method", receipt: "Receipt",
+                view: "View", payment_receipt: "PAYMENT RECEIPT", transaction_num: "Transaction #", client: "Client",
+                total: "Total", thank_you: "Thank you for your trust!", print: "Print", close: "Close",
+                wedding_on: "Wedding on", redirect_paypal: "Redirecting to PayPal...", payment_success: "Payment successful!"
+            },
+            ar: {
+                home: "الرئيسية", my_services: "خدماتي", planning: "التخطيط", payments: "المدفوعات", messages: "الرسائل",
+                logout: "تسجيل الخروج", payments_title: "مدفوعاتي", payments_subtitle: "إدارة معاملاتك وإيصالاتك",
+                new_payment: "دفع جديد", total_budget: "الميزانية الإجمالية", already_paid: "تم الدفع", remaining: "المتبقي",
+                service_to_pay: "الخدمة للدفع", select_service: "اختر خدمة", amount: "المبلغ (MAD)",
+                enter_amount: "أدخل المبلغ", pay_paypal: "الدفع عبر PayPal", how_to_pay: "كيفية الدفع؟",
+                step1_title: "1. اختر الخدمة", step1_desc: "اختر مقدم الخدمة الذي تريد الدفع له.",
+                step2_title: "2. أدخل المبلغ", step2_desc: "حدد المبلغ المراد دفعه (عربون أو رصيد).",
+                step3_title: "3. الدفع عبر PayPal", step3_desc: "سيتم توجيهك إلى PayPal لإكمال الدفع بشكل آمن.",
+                step4_title: "4. استلم إيصالك", step4_desc: "سيتم إنشاء إيصال تلقائياً ومتاح في السجل.",
+                history_title: "سجل المدفوعات", date: "التاريخ", service: "الخدمة", method: "الطريقة", receipt: "الإيصال",
+                view: "عرض", payment_receipt: "إيصال الدفع", transaction_num: "رقم المعاملة", client: "العميل",
+                total: "المجموع", thank_you: "شكراً لثقتكم!", print: "طباعة", close: "إغلاق",
+                wedding_on: "الزفاف في", redirect_paypal: "التوجيه إلى PayPal...", payment_success: "تم الدفع بنجاح!"
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang] && t[lang][key]) {
+                    el.textContent = t[lang][key];
+                }
+            });
+            
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[lang] && t[lang][key]) {
+                    el.placeholder = t[lang][key];
+                }
+            });
+            
+            updateWeddingDate();
+        }
+
+        function logout() {
+            localStorage.removeItem('current_client');
+            window.location.href = 'index.html';
+        }
+
+        const client = JSON.parse(localStorage.getItem('current_client'));
+        if (!client) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('clientName').textContent = `${client.nom} & ${client.partenaire}`;
+        document.getElementById('budgetTotal').textContent = client.budget.toLocaleString() + ' MAD';
+        document.getElementById('remainingAmount').textContent = (client.budget - 85000).toLocaleString() + ' MAD';
+
+        function updateWeddingDate() {
+            const weddingText = t[currentLang].wedding_on;
+            document.getElementById('weddingDate').textContent = `${weddingText} ${client.dateMariage}`;
+        }
+
+        document.getElementById('paymentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const service = document.getElementById('service').options[document.getElementById('service').selectedIndex].text;
+            const amount = document.getElementById('amount').value;
+            
+            alert(`${t[currentLang].redirect_paypal}\n${t[currentLang].service}: ${service}\n${t[currentLang].amount}: ${amount} MAD`);
+            
+            setTimeout(() => {
+                const date = new Date().toISOString().split('T')[0];
+                const transId = 'PP' + Date.now();
+                
+                const row = `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${service.split(' - ')[0]}</td>
+                        <td>${amount} MAD</td>
+                        <td>PayPal</td>
+                        <td><button class="btn-receipt" onclick="viewReceipt('${service.split(' - ')[0]}', ${amount}, '${date}', '${transId}')"><span data-i18n="view">${t[currentLang].view}</span></button></td>
+                    </tr>
+                `;
+                document.getElementById('historyTable').insertAdjacentHTML('afterbegin', row);
+                
+                alert(t[currentLang].payment_success);
+                document.getElementById('paymentForm').reset();
+            }, 2000);
+        });
+
+        function viewReceipt(service, amount, date, transId) {
+            document.getElementById('receiptId').textContent = transId;
+            document.getElementById('receiptDate').textContent = date;
+            document.getElementById('receiptClient').textContent = `${client.nom} & ${client.partenaire}`;
+            document.getElementById('receiptService').textContent = service;
+            document.getElementById('receiptAmount').textContent = amount.toLocaleString();
+            
+            document.getElementById('receiptModal').style.display = 'flex';
+        }
+
+        function closeReceipt() {
+            document.getElementById('receiptModal').style.display = 'none';
+        }
+
+        function printReceipt() {
+            window.print();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'fr';
+            currentLang = lang;
+            document.getElementById('langSelect').value = lang;
+            setLang(lang);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .client-info {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .client-info h3 {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 5px;
+        }
+        .client-info p {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+        .profile-container {
+            background: var(--white);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            max-width: 800px;
+        }
+        .form-section {
+            margin-bottom: 40px;
+        }
+        .form-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--silk);
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(197, 160, 89, 0.2);
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: var(--rose-gold);
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.15);
+        }
+        input[readonly] {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+        .btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-save {
+            background: linear-gradient(135deg, var(--rose-gold), #a68847);
+            color: white;
+        }
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.4);
+        }
+        .btn-cancel {
+            background: #ddd;
+            color: var(--text);
+        }
+        .btn-cancel:hover {
+            background: #ccc;
+        }
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+        
+        /* RTL Support */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
+            </select>
+        </div>
+        
+        <div class="client-info">
+            <h3 id="clientName"></h3>
+            <p id="weddingDate"></p>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="client-dashboard.html" class="menu-link">
+                    <i class="fas fa-home"></i> 
+                    <span data-i18n="home">Accueil</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-services.html" class="menu-link">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="my_services">Mes Services</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-planning.html" class="menu-link">
+                    <i class="fas fa-calendar"></i> 
+                    <span data-i18n="planning">Planning</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-paiements.html" class="menu-link">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="payments">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-messages.html" class="menu-link">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-profil.html" class="menu-link active">
+                    <i class="fas fa-user-circle"></i> 
+                    <span data-i18n="my_profile">Mon Profil</span>
+                </a>
+            </li>
+        </ul>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 data-i18n="profile_title">Mon Profil</h1>
+            <p data-i18n="profile_subtitle">Gérer mes informations personnelles</p>
+        </header>
+
+        <div class="profile-container">
+            <div id="alertBox" class="alert">
+                <i class="fas fa-check-circle"></i>
+                <span id="alertMessage"></span>
+            </div>
+
+            <form id="profileForm">
+                <!-- INFORMATIONS PERSONNELLES -->
+                <div class="form-section">
+                    <h2 data-i18n="personal_info">👤 Informations Personnelles</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label data-i18n="label_name">Votre nom complet</label>
+                            <input type="text" id="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_partner">Nom du partenaire</label>
+                            <input type="text" id="partenaire" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label data-i18n="label_email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_phone">Téléphone</label>
+                            <input type="tel" id="tel" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MARIAGE -->
+                <div class="form-section">
+                    <h2 data-i18n="wedding_info">💍 Informations du Mariage</h2>
+                    
+                    <div class="form-group">
+                        <label data-i18n="label_wedding_date">Date du mariage</label>
+                        <input type="date" id="dateMariage" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="label_guests">Nombre d'invités (optionnel)</label>
+                        <input type="number" id="invites" min="0" placeholder="Ex: 150">
+                    </div>
+                </div>
+
+                <!-- SÉCURITÉ -->
+                <div class="form-section">
+                    <h2 data-i18n="security_title">🔒 Modifier le mot de passe</h2>
+                    
+                    <div class="form-group">
+                        <label data-i18n="label_current_password">Mot de passe actuel</label>
+                        <input type="password" id="currentPassword" placeholder="Laisser vide si non modifié">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label data-i18n="label_new_password">Nouveau mot de passe</label>
+                            <input type="password" id="newPassword" placeholder="Laisser vide si non modifié">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_confirm_password">Confirmer le mot de passe</label>
+                            <input type="password" id="confirmPassword" placeholder="Laisser vide si non modifié">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFORMATIONS EN LECTURE SEULE -->
+                <div class="form-section">
+                    <h2 data-i18n="account_info">ℹ️ Informations du Compte</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label data-i18n="label_budget">Budget Total</label>
+                            <input type="text" id="budget" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_status">Statut</label>
+                            <input type="text" id="statut" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOUTONS -->
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-save">
+                        <i class="fas fa-save"></i>
+                        <span data-i18n="btn_save">Enregistrer les modifications</span>
+                    </button>
+                    <button type="button" class="btn btn-cancel" onclick="window.location.reload()">
+                        <i class="fas fa-times"></i>
+                        <span data-i18n="btn_cancel">Annuler</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'fr';
+        
+        const t = {
+            fr: {
+                home: "Accueil", my_services: "Mes Services", planning: "Planning", 
+                payments: "Paiements", messages: "Messages", my_profile: "Mon Profil",
+                logout: "Déconnexion", profile_title: "Mon Profil", 
+                profile_subtitle: "Gérer mes informations personnelles",
+                personal_info: "👤 Informations Personnelles",
+                wedding_info: "💍 Informations du Mariage",
+                security_title: "🔒 Modifier le mot de passe",
+                account_info: "ℹ️ Informations du Compte",
+                label_name: "Votre nom complet", label_partner: "Nom du partenaire",
+                label_email: "Email", label_phone: "Téléphone",
+                label_wedding_date: "Date du mariage", label_guests: "Nombre d'invités (optionnel)",
+                label_current_password: "Mot de passe actuel", 
+                label_new_password: "Nouveau mot de passe",
+                label_confirm_password: "Confirmer le mot de passe",
+                label_budget: "Budget Total", label_status: "Statut",
+                btn_save: "Enregistrer les modifications", btn_cancel: "Annuler",
+                wedding_on: "Mariage le",
+                success_message: "✅ Profil mis à jour avec succès !",
+                error_password_match: "⚠️ Les mots de passe ne correspondent pas",
+                error_current_password: "⚠️ Le mot de passe actuel est incorrect",
+                error_general: "❌ Erreur lors de la mise à jour"
+            },
+            en: {
+                home: "Home", my_services: "My Services", planning: "Planning",
+                payments: "Payments", messages: "Messages", my_profile: "My Profile",
+                logout: "Logout", profile_title: "My Profile",
+                profile_subtitle: "Manage my personal information",
+                personal_info: "👤 Personal Information",
+                wedding_info: "💍 Wedding Information",
+                security_title: "🔒 Change Password",
+                account_info: "ℹ️ Account Information",
+                label_name: "Your full name", label_partner: "Partner's name",
+                label_email: "Email", label_phone: "Phone",
+                label_wedding_date: "Wedding date", label_guests: "Number of guests (optional)",
+                label_current_password: "Current password",
+                label_new_password: "New password",
+                label_confirm_password: "Confirm password",
+                label_budget: "Total Budget", label_status: "Status",
+                btn_save: "Save changes", btn_cancel: "Cancel",
+                wedding_on: "Wedding on",
+                success_message: "✅ Profile updated successfully!",
+                error_password_match: "⚠️ Passwords do not match",
+                error_current_password: "⚠️ Current password is incorrect",
+                error_general: "❌ Error updating profile"
+            },
+            ar: {
+                home: "الرئيسية", my_services: "خدماتي", planning: "التخطيط",
+                payments: "المدفوعات", messages: "الرسائل", my_profile: "ملفي الشخصي",
+                logout: "تسجيل الخروج", profile_title: "ملفي الشخصي",
+                profile_subtitle: "إدارة معلوماتي الشخصية",
+                personal_info: "👤 المعلومات الشخصية",
+                wedding_info: "💍 معلومات الزفاف",
+                security_title: "🔒 تغيير كلمة المرور",
+                account_info: "ℹ️ معلومات الحساب",
+                label_name: "اسمك الكامل", label_partner: "اسم الشريك",
+                label_email: "البريد الإلكتروني", label_phone: "الهاتف",
+                label_wedding_date: "تاريخ الزفاف", label_guests: "عدد الضيوف (اختياري)",
+                label_current_password: "كلمة المرور الحالية",
+                label_new_password: "كلمة المرور الجديدة",
+                label_confirm_password: "تأكيد كلمة المرور",
+                label_budget: "الميزانية الإجمالية", label_status: "الحالة",
+                btn_save: "حفظ التغييرات", btn_cancel: "إلغاء",
+                wedding_on: "الزفاف في",
+                success_message: "✅ تم تحديث الملف الشخصي بنجاح!",
+                error_password_match: "⚠️ كلمات المرور غير متطابقة",
+                error_current_password: "⚠️ كلمة المرور الحالية غير صحيحة",
+                error_general: "❌ خطأ في التحديث"
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang] && t[lang][key]) {
+                    el.textContent = t[lang][key];
+                }
+            });
+            
+            updateWeddingDate();
+        }
+
+        function logout() {
+            localStorage.removeItem('current_client');
+            window.location.href = 'index.html';
+        }
+
+        const client = JSON.parse(localStorage.getItem('current_client'));
+        if (!client) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('clientName').textContent = `${client.nom} & ${client.partenaire}`;
+
+        function updateWeddingDate() {
+            const weddingText = t[currentLang].wedding_on;
+            document.getElementById('weddingDate').textContent = `${weddingText} ${client.dateMariage}`;
+        }
+
+        // CHARGER LES DONNÉES DU CLIENT
+        function loadClientData() {
+            document.getElementById('nom').value = client.nom || '';
+            document.getElementById('partenaire').value = client.partenaire || '';
+            document.getElementById('email').value = client.email || '';
+            document.getElementById('tel').value = client.tel || '';
+            document.getElementById('dateMariage').value = client.dateMariage || '';
+            document.getElementById('invites').value = client.invites || '';
+            document.getElementById('budget').value = (client.budget || 0).toLocaleString() + ' MAD';
+            document.getElementById('statut').value = client.statut || '';
+        }
+
+        // ENREGISTRER LES MODIFICATIONS
+        document.getElementById('profileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Récupérer les nouvelles valeurs
+            const updatedClient = {
+                ...client,
+                nom: document.getElementById('nom').value,
+                partenaire: document.getElementById('partenaire').value,
+                email: document.getElementById('email').value,
+                tel: document.getElementById('tel').value,
+                dateMariage: document.getElementById('dateMariage').value,
+                invites: document.getElementById('invites').value
+            };
+
+            // VÉRIFIER LES MOTS DE PASSE
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword || confirmPassword) {
+                // Si on veut changer le mot de passe
+                if (currentPassword !== client.password) {
+                    showAlert(t[currentLang].error_current_password, 'error');
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    showAlert(t[currentLang].error_password_match, 'error');
+                    return;
+                }
+                updatedClient.password = newPassword;
+            }
+
+            // METTRE À JOUR DANS LE LOCALSTORAGE
+            const allData = JSON.parse(localStorage.getItem('goldenpromise_data') || '{}');
+            const clientIndex = allData.clients.findIndex(c => c.id === client.id);
+            
+            if (clientIndex !== -1) {
+                allData.clients[clientIndex] = updatedClient;
+                localStorage.setItem('goldenpromise_data', JSON.stringify(allData));
+                localStorage.setItem('current_client', JSON.stringify(updatedClient));
+                
+                showAlert(t[currentLang].success_message, 'success');
+                
+                // Recharger après 1.5 secondes
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showAlert(t[currentLang].error_general, 'error');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            const alertMessage = document.getElementById('alertMessage');
+            
+            alertBox.className = `alert alert-${type}`;
+            alertMessage.textContent = message;
+            alertBox.style.display = 'flex';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'fr';
+            currentLang = lang;
+            document.getElementById('langSelect').value = lang;
+            setLang(lang);
+            loadClientData();
+        });
+    </script>
+</body>
+</html>

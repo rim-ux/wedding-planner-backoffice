@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Planning | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--silk);
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid rgba(197, 160, 89, 0.1);
+            padding: 40px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .logo {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+        }
+        .client-info {
+            padding: 0 40px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--silk);
+        }
+        .client-info h3 {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 5px;
+        }
+        .client-info p {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .menu-list { list-style: none; }
+        .menu-item { padding: 0 20px; margin-bottom: 5px; }
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(197, 160, 89, 0.1);
+            opacity: 1;
+        }
+        .menu-link i { color: var(--rose-gold); }
+        .logout-btn {
+            margin: 30px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-family: 'Parisienne', cursive;
+            font-size: 1.8rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--rose-gold), #a68847);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 35px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--rose-gold);
+            border: 4px solid var(--silk);
+        }
+        .timeline-time {
+            color: var(--rose-gold);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .timeline-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .timeline-desc {
+            color: #777;
+            line-height: 1.6;
+        }
+        .timeline-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .btn-download {
+            padding: 15px 30px;
+            background: var(--rose-gold);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-download:hover {
+            opacity: 0.9;
+        }
+        
+        /* RTL Support */
+        body[dir="rtl"] .sidebar {
+            border-right: none;
+            border-left: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        body[dir="rtl"] .main-content {
+            margin-left: 0;
+            margin-right: 280px;
+        }
+        body[dir="rtl"] .menu-link {
+            flex-direction: row-reverse;
+        }
+        body[dir="rtl"] .timeline {
+            padding-left: 0;
+            padding-right: 50px;
+        }
+        body[dir="rtl"] .timeline::before {
+            left: auto;
+            right: 20px;
+        }
+        body[dir="rtl"] .timeline-item::before {
+            left: auto;
+            right: -38px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">Golden <span>Promise</span></div>
+        
+        <div style="padding: 0 20px; margin-bottom: 30px;">
+            <select id="langSelect" onchange="setLang(this.value)" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid rgba(197, 160, 89, 0.2);
+                border-radius: 50px;
+                background: white;
+                cursor: pointer;
+                font-size: 0.85rem;
+                outline: none;
+                text-align: center;
+            ">
+                <option value="fr">🇫🇷 Français</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇲🇦 العربية</option>
+            </select>
+        </div>
+        
+        <div class="client-info">
+            <h3 id="clientName"></h3>
+            <p id="weddingDate"></p>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="client-dashboard.html" class="menu-link">
+                    <i class="fas fa-home"></i> 
+                    <span data-i18n="home">Accueil</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-services.html" class="menu-link">
+                    <i class="fas fa-briefcase"></i> 
+                    <span data-i18n="my_services">Mes Services</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-planning.html" class="menu-link active">
+                    <i class="fas fa-calendar"></i> 
+                    <span data-i18n="planning">Planning</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-paiements.html" class="menu-link">
+                    <i class="fas fa-credit-card"></i> 
+                    <span data-i18n="payments">Paiements</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="client-messages.html" class="menu-link">
+                    <i class="fas fa-envelope"></i> 
+                    <span data-i18n="messages">Messages</span>
+                </a>
+            </li>
+        </ul>
+        <li class="menu-item">
+    <a href="client-profil.html" class="menu-link">
+        <i class="fas fa-user-circle"></i> 
+        <span data-i18n="my_profile">Mon Profil</span>
+    </a>
+</li>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> 
+            <span data-i18n="logout">Déconnexion</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 data-i18n="planning_title">Planning de la Journée</h1>
+            <p data-i18n="planning_subtitle">Chronologie détaillée de votre mariage</p>
+        </header>
+
+        <button class="btn-download" onclick="downloadPlanning()">
+            <i class="fas fa-download"></i> 
+            <span data-i18n="download_planning">Télécharger le planning</span>
+        </button>
+
+        <div class="timeline" id="timeline">
+            <!-- Timeline items will be rendered here -->
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'fr';
+        
+        const t = {
+            fr: {
+                home: "Accueil",
+                my_services: "Mes Services",
+                planning: "Planning",
+                payments: "Paiements",
+                messages: "Messages",
+                logout: "Déconnexion",
+                planning_title: "Planning de la Journée",
+                planning_subtitle: "Chronologie détaillée de votre mariage",
+                download_planning: "Télécharger le planning",
+                wedding_on: "Mariage le",
+                preparation: "Préparation des Mariés",
+                preparation_desc: "Coiffure, maquillage et habillage dans les suites du Palais Soleiman. Photographe présent pour immortaliser ces moments.",
+                ceremony: "Cérémonie Civile",
+                ceremony_desc: "Échange des vœux dans le jardin fleuri. Présence de 50 invités proches. Musique live par l'orchestre \"Harmonie Royale\".",
+                photoshoot: "Session Photos",
+                photoshoot_desc: "Photos de couple et de groupe dans les jardins et terrasses du palais. Inclut photos avec les invités et la famille.",
+                cocktail: "Cocktail de Bienvenue",
+                cocktail_desc: "Accueil des invités avec cocktails, canapés et pâtisseries marocaines. Animation musicale douce en arrière-plan.",
+                entrance: "Entrée des Mariés",
+                entrance_desc: "Grande entrée solennelle dans la salle de réception. Danse d'ouverture et première valse du couple.",
+                dinner: "Dîner de Gala",
+                dinner_desc: "Menu gastronomique en 5 services par le Traiteur Royal. Service à table avec vins et champagne. Discours et toasts.",
+                cake: "Pièce Montée",
+                cake_desc: "Présentation et découpe du wedding cake de 5 étages. Moment photo avec projection vidéo des moments forts.",
+                party: "Soirée Dansante",
+                party_desc: "DJ Events anime la soirée avec mix oriental et international. Ouverture du bar et photobooth pour les invités.",
+                end: "Fin de la Soirée",
+                end_desc: "Départ des mariés sous une pluie de pétales de roses. Distribution des cadeaux aux invités. Service voiturier disponible."
+            },
+            en: {
+                home: "Home",
+                my_services: "My Services",
+                planning: "Planning",
+                payments: "Payments",
+                messages: "Messages",
+                logout: "Logout",
+                planning_title: "Day Planning",
+                planning_subtitle: "Detailed timeline of your wedding",
+                download_planning: "Download planning",
+                wedding_on: "Wedding on",
+                preparation: "Bride & Groom Preparation",
+                preparation_desc: "Hair, makeup and dressing in the Palais Soleiman suites. Photographer present to capture these moments.",
+                ceremony: "Civil Ceremony",
+                ceremony_desc: "Exchange of vows in the flower garden. Presence of 50 close guests. Live music by the \"Harmonie Royale\" orchestra.",
+                photoshoot: "Photo Session",
+                photoshoot_desc: "Couple and group photos in the palace gardens and terraces. Includes photos with guests and family.",
+                cocktail: "Welcome Cocktail",
+                cocktail_desc: "Guest reception with cocktails, canapés and Moroccan pastries. Soft background music.",
+                entrance: "Bride & Groom Entrance",
+                entrance_desc: "Grand solemn entrance to the reception hall. Opening dance and couple's first waltz.",
+                dinner: "Gala Dinner",
+                dinner_desc: "5-course gourmet menu by Traiteur Royal. Table service with wines and champagne. Speeches and toasts.",
+                cake: "Wedding Cake",
+                cake_desc: "Presentation and cutting of 5-tier wedding cake. Photo moment with video projection of highlights.",
+                party: "Dance Party",
+                party_desc: "DJ Events hosts the evening with oriental and international mix. Bar opening and photobooth for guests.",
+                end: "End of Evening",
+                end_desc: "Bride and groom departure under a rain of rose petals. Distribution of gifts to guests. Valet service available."
+            },
+            ar: {
+                home: "الرئيسية",
+                my_services: "خدماتي",
+                planning: "التخطيط",
+                payments: "المدفوعات",
+                messages: "الرسائل",
+                logout: "تسجيل الخروج",
+                planning_title: "جدول اليوم",
+                planning_subtitle: "جدول زمني مفصل لحفل زفافك",
+                download_planning: "تحميل الجدول",
+                wedding_on: "الزفاف في",
+                preparation: "تحضير العروسين",
+                preparation_desc: "تصفيف الشعر والمكياج والملابس في أجنحة قصر سليمان. المصور موجود لتخليد هذه اللحظات.",
+                ceremony: "الحفل المدني",
+                ceremony_desc: "تبادل العهود في الحديقة المزهرة. حضور 50 ضيفاً مقرباً. موسيقى حية من أوركسترا هارموني رويال.",
+                photoshoot: "جلسة التصوير",
+                photoshoot_desc: "صور للزوجين والمجموعات في حدائق القصر والتراسات. تشمل الصور مع الضيوف والعائلة.",
+                cocktail: "كوكتيل الترحيب",
+                cocktail_desc: "استقبال الضيوف مع الكوكتيلات والمقبلات والحلويات المغربية. موسيقى هادئة في الخلفية.",
+                entrance: "دخول العروسين",
+                entrance_desc: "دخول كبير إلى قاعة الاستقبال. رقصة الافتتاح والفالس الأول للزوجين.",
+                dinner: "عشاء الاحتفال",
+                dinner_desc: "قائمة طعام فاخرة من 5 أطباق من تريتور رويال. خدمة على الطاولة مع النبيذ والشمبانيا. الخطب والنخب.",
+                cake: "كعكة الزفاف",
+                cake_desc: "تقديم وقطع كعكة الزفاف من 5 طوابق. لحظة صور مع عرض فيديو للحظات المميزة.",
+                party: "حفلة الرقص",
+                party_desc: "دي جي إيفنتس يحيي الحفل بمزيج شرقي ودولي. افتتاح البار وصور فوتوبوث للضيوف.",
+                end: "نهاية الحفل",
+                end_desc: "مغادرة العروسين تحت مطر من بتلات الورد. توزيع الهدايا على الضيوف. خدمة السائق متاحة."
+            }
+        };
+
+        const timelineData = [
+            { time: "10:00 - 12:00", icon: "🌅", titleKey: "preparation", descKey: "preparation_desc" },
+            { time: "14:00 - 15:00", icon: "💍", titleKey: "ceremony", descKey: "ceremony_desc" },
+            { time: "15:00 - 16:30", icon: "📸", titleKey: "photoshoot", descKey: "photoshoot_desc" },
+            { time: "16:30 - 18:00", icon: "🥂", titleKey: "cocktail", descKey: "cocktail_desc" },
+            { time: "18:00 - 19:00", icon: "🎊", titleKey: "entrance", descKey: "entrance_desc" },
+            { time: "19:00 - 21:30", icon: "🍽️", titleKey: "dinner", descKey: "dinner_desc" },
+            { time: "21:30 - 22:00", icon: "🎂", titleKey: "cake", descKey: "cake_desc" },
+            { time: "22:00 - 02:00", icon: "🎵", titleKey: "party", descKey: "party_desc" },
+            { time: "02:00", icon: "🌙", titleKey: "end", descKey: "end_desc" }
+        ];
+
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = timelineData.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-icon">${item.icon}</div>
+                    <div class="timeline-time">${item.time}</div>
+                    <div class="timeline-title">${t[currentLang][item.titleKey]}</div>
+                    <div class="timeline-desc">${t[currentLang][item.descKey]}</div>
+                </div>
+            `).join('');
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[lang] && t[lang][key]) {
+                    el.textContent = t[lang][key];
+                }
+            });
+            
+            updateWeddingDate();
+            renderTimeline();
+        }
+
+        function logout() {
+            localStorage.removeItem('current_client');
+            window.location.href = 'index.html';
+        }
+
+        const client = JSON.parse(localStorage.getItem('current_client'));
+        if (!client) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('clientName').textContent = `${client.nom} & ${client.partenaire}`;
+
+        function updateWeddingDate() {
+            const weddingText = t[currentLang].wedding_on;
+            document.getElementById('weddingDate').textContent = `${weddingText} ${client.dateMariage}`;
+        }
+
+        function downloadPlanning() {
+            const planning = `
+PLANNING DU MARIAGE / WEDDING PLANNING / جدول الزفاف
+${client.nom} & ${client.partenaire}
+Date: ${client.dateMariage}
+
+${timelineData.map(item => `
+${item.time} | ${t[currentLang][item.titleKey]}
+${t[currentLang][item.descKey]}
+`).join('\n')}
+
+Golden Promise - Wedding Planner
+            `.trim();
+
+            const blob = new Blob([planning], { type: 'text/plain;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'planning-mariage.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'fr';
+            currentLang = lang;
+            document.getElementById('langSelect').value = lang;
+            setLang(lang);
+        });
+    </script>
+</body>
+</html>

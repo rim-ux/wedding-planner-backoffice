@@ -3,877 +3,598 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Promise - Wedding Planner</title>
+    <title>Golden Promise | L'Excellence du Mariage</title>
     
-    <!-- ✅ Font Awesome pour l'icône œil professionnelle -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Fonts de Prestige -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,600&family=Montserrat:wght@100;300;500&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --blush: #fdf4f2;
+            --silk: #fcfaf8;
+            --rose-gold: #c5a059;
+            --love-pink: #eebcbd;
+            --text: #2d2a26;
+            --white: #ffffff;
+            --ease: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #F5F0EB;
-            color: #2B3A2F;
+        /* --- Effet de Grain de Film (Nostalgie Luxe) --- */
+        body::before {
+            content: ""; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.04; 
+            pointer-events: none; 
+            z-index: 10000;
         }
 
-        /* NAVBAR */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(254, 253, 251, 0.97);
-            backdrop-filter: blur(10px);
-            padding: 25px 80px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            background: var(--silk); 
+            color: var(--text); 
+            font-family: 'Montserrat', sans-serif; 
+            overflow-x: hidden;
+            line-height: 1.4;
+            cursor: none;
+        }
+
+        /* --- Animation Arrière-plan (Pétales) --- */
+        #petal-field { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; 
+            z-index: 1; 
+        }
+        
+        .petal { 
+            position: absolute; 
+            background: rgba(238, 188, 189, 0.35); 
+            border-radius: 50% 0 50% 50%; 
+            pointer-events: none; 
+        }
+
+        /* --- Custom Cursor Luxe --- */
+        #cursor { 
+            position: fixed; 
+            width: 8px; 
+            height: 8px; 
+            background: var(--rose-gold); 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: 10001; 
+        }
+        
+        #cursor-aura { 
+            position: fixed; 
+            width: 40px; 
+            height: 40px; 
+            border: 0.5px solid var(--rose-gold); 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: 10000; 
+            transition: transform 0.4s var(--ease);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            padding: 40px 6%;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(to bottom, rgba(252, 250, 248, 0.95), transparent);
         }
-
-        .logo {
-            font-size: 20px;
-            font-weight: 400;
-            color: #9AB396;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #9B8B7E;
-            font-size: 12px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #5A6B4D;
-        }
-
-        .btn-login {
-            padding: 12px 35px;
-            background: #9AB396;
-            color: white;
-            border: none;
+        
+        .logo { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 1.6rem; 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            text-decoration: none; 
+            color: inherit;
             cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            border-radius: 5px;
         }
-
-        .btn-login:hover {
-            background: #7F9B7A;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(154, 179, 150, 0.3);
+        
+        .logo span { 
+            font-family: 'Parisienne', cursive; 
+            color: var(--rose-gold); 
+            text-transform: none; 
+            margin-left: -5px; 
         }
-
-        /* HERO SECTION */
-        .hero {
-            margin-top: 90px;
-            min-height: 85vh;
-            background: linear-gradient(rgba(245, 240, 235, 0.4), rgba(245, 240, 235, 0.6)),
-                        url('assets/img/wedding-hero.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        
+        .nav-links { 
             display: flex;
-            flex-direction: column;
+            gap: 0;
             align-items: center;
+        }
+        
+        .nav-links a { 
+            text-decoration: none; 
+            color: inherit; 
+            font-size: 0.7rem; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            margin-left: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--rose-gold);
+        }
+
+        /* --- HERO SECTION : LARGE & IMMERSIF --- */
+        .hero {
+            height: 100vh; 
+            width: 100%;
+            position: relative; 
+            overflow: hidden;
+            display: flex; 
+            align-items: center; 
             justify-content: center;
             text-align: center;
-            padding: 80px 50px;
+        }
+        
+        .hero-bg {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 120%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+                        url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070') center/cover;
+            z-index: -1;
+        }
+        
+        .hero-content { 
+            z-index: 2; 
+            padding: 0 5%; 
+        }
+        
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 300; 
+            line-height: 0.9;
+        }
+        
+        .hero-title em { 
+            font-family: 'Parisienne', cursive; 
+            color: var(--rose-gold); 
+            font-size: 1.1em; 
+            display: block; 
+            margin-top: 15px; 
+        }
+
+        /* --- SECTION STORY --- */
+        .section-story { 
+            padding: 150px 10%; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 80px; 
+            align-items: center; 
+            position: relative; 
+            z-index: 2; 
+        }
+        
+        .story-img { 
+            width: 100%; 
+            height: 600px; 
+            border-radius: 300px 300px 20px 20px; 
+            overflow: hidden; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.05); 
+        }
+        
+        .story-img img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 2s var(--ease); 
+        }
+        
+        .story-img:hover img {
+            transform: scale(1.1);
+        }
+        
+        .story-text h2 { 
+            font-family: 'Cormorant Garamond'; 
+            font-size: 3.5rem; 
+            margin-bottom: 30px; 
+            line-height: 1; 
+            font-weight: 300; 
+        }
+        
+        .story-text p { 
+            font-weight: 300; 
+            font-size: 1.1rem; 
+            line-height: 1.8; 
+            color: #555; 
+        }
+
+        /* --- SERVICES AVEC IMAGES --- */
+        .services-wrap { 
+            background: var(--blush); 
+            padding: 120px 10%; 
+            border-radius: 100px 100px 0 0; 
+        }
+        
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 40px; 
+            margin-top: 80px; 
+        }
+        
+        .service-card { 
+            background: var(--white); 
+            text-align: center;
+            border-radius: 20px; 
+            transition: 0.6s var(--ease);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            overflow: hidden;
             position: relative;
         }
-
-        .hero::before {
-            content: '✿';
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 50px;
-            color: #9AB396;
-            opacity: 0.7;
+        
+        .service-card:hover { 
+            transform: translateY(-15px); 
+            box-shadow: 0 40px 80px rgba(197, 160, 89, 0.2); 
         }
 
-        .hero h1 {
-            font-size: 68px;
-            font-weight: 400;
-            color: #5A6B4D;
-            margin-bottom: 25px;
-            line-height: 1.2;
-            font-family: 'Georgia', serif;
-            text-shadow: 0 3px 20px rgba(255, 255, 255, 0.9);
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #2B3A2F;
-            margin-bottom: 50px;
-            max-width: 700px;
-            line-height: 1.8;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 25px;
-        }
-
-        .btn-primary {
-            padding: 18px 45px;
-            background: #9AB396;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.4s;
-            font-family: 'Georgia', serif;
-            box-shadow: 0 4px 15px rgba(154, 179, 150, 0.3);
-            border-radius: 5px;
-        }
-
-        .btn-primary:hover {
-            background: #7F9B7A;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(154, 179, 150, 0.4);
-        }
-
-        .btn-secondary {
-            padding: 18px 45px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #5A6B4D;
-            border: 2px solid #5A6B4D;
-            cursor: pointer;
-            font-size: 12px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.4s;
-            font-family: 'Georgia', serif;
-            font-weight: 600;
-            border-radius: 5px;
-        }
-
-        .btn-secondary:hover {
-            background: #5A6B4D;
-            color: white;
-        }
-
-        /* STATS */
-        .stats {
-            padding: 80px 50px;
-            background: #FEFDFB;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stat-item {
-            text-align: center;
-            border-right: 1px solid #E5DED5;
-        }
-
-        .stat-item:last-child {
-            border-right: none;
-        }
-
-        .stat-number {
-            font-size: 48px;
-            color: #9AB396;
-            font-weight: 300;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: #9B8B7E;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* SERVICES */
-        .services {
-            padding: 100px 80px;
-            background: #F5F0EB;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .section-subtitle {
-            font-size: 12px;
-            color: #9AB396;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .section-title {
-            font-size: 48px;
-            color: #5A6B4D;
-            font-weight: 300;
-            line-height: 1.3;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .service-card {
-            background: #FEFDFB;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s;
-            border: 1px solid #E5DED5;
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(154, 179, 150, 0.2);
-        }
-
+        /* IMAGE CONTAINER */
         .service-image {
+            position: relative;
             width: 100%;
-            height: 180px;
-            background-size: cover;
-            background-position: center;
+            height: 300px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
         }
 
-        .service-title {
-            font-size: 18px;
-            color: #5A6B4D;
-            margin: 20px 20px 10px 20px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .service-desc {
-            color: #9B8B7E;
-            line-height: 1.6;
-            font-size: 13px;
-            margin: 0 20px 20px 20px;
-        }
-
-        /* ABOUT */
-        .about {
-            padding: 100px 80px;
-            background: #FEFDFB;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .about-image {
+        .service-image img {
             width: 100%;
-            height: 500px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(154, 179, 150, 0.2);
-        }
-
-        .about-content h2 {
-            font-size: 42px;
-            color: #5A6B4D;
-            font-weight: 300;
-            margin-bottom: 25px;
-            line-height: 1.3;
-        }
-
-        .about-content p {
-            color: #9B8B7E;
-            line-height: 1.9;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        /* TESTIMONIALS */
-        .testimonials {
-            padding: 100px 80px;
-            background: #F5F0EB;
-        }
-
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: #FEFDFB;
-            padding: 45px;
-            border-left: 3px solid #9AB396;
-        }
-
-        .testimonial-text {
-            font-size: 16px;
-            color: #2B3A2F;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #9AB396 0%, #A8B89F 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .author-info h4 {
-            color: #5A6B4D;
-            font-size: 16px;
-            margin-bottom: 5px;
-            font-weight: 400;
-        }
-
-        .author-info p {
-            color: #9B8B7E;
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
-
-        /* CTA */
-        .cta {
-            padding: 120px 80px;
-            background: #FEFDFB;
-            text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 52px;
-            color: #5A6B4D;
-            font-weight: 300;
-            margin-bottom: 30px;
-            line-height: 1.3;
-        }
-
-        .cta p {
-            font-size: 18px;
-            color: #9B8B7E;
-            margin-bottom: 50px;
-            max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-        }
-
-        /* FOOTER */
-        .footer {
-            background: #5A6B4D;
-            color: #E5DED5;
-            padding: 80px 80px 40px;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 50px;
-            margin-bottom: 50px;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 25px;
-            font-size: 15px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 400;
-            color: #9AB396;
-        }
-
-        .footer-section a {
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--ease);
             display: block;
-            color: #E5DED5;
-            text-decoration: none;
-            margin-bottom: 12px;
-            font-size: 14px;
-            transition: color 0.3s;
         }
 
-        .footer-section a:hover {
-            color: #9AB396;
+        .service-card:hover .service-image img {
+            transform: scale(1.15) rotate(2deg);
         }
 
-        .footer-bottom {
-            border-top: 1px solid #7F9B7A;
-            padding-top: 30px;
-            text-align: center;
-            color: #E5DED5;
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
-
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
+        /* OVERLAY AVEC ICÔNE */
+        .service-overlay {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(43, 58, 47, 0.9);
-            justify-content: center;
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.92), rgba(166, 136, 71, 0.92));
+            display: flex;
             align-items: center;
-            z-index: 2000;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
         }
 
-        .modal-content {
-            background: #FEFDFB;
-            padding: 60px;
-            width: 500px;
-            max-width: 90%;
-            position: relative;
-            border: 2px solid #9AB396;
-            border-radius: 8px;
+        .service-card:hover .service-overlay {
+            opacity: 1;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 25px;
-            right: 30px;
-            font-size: 30px;
-            cursor: pointer;
-            color: #9B8B7E;
-            transition: color 0.3s;
-        }
-
-        .close-modal:hover {
-            color: #5A6B4D;
-        }
-
-        .modal-title {
-            font-size: 36px;
-            color: #5A6B4D;
-            margin-bottom: 40px;
-            text-align: center;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        .form-group {
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .form-group label {
-            display: block;
-            color: #5A6B4D;
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #E5DED5;
-            background: #FFF;
-            font-size: 15px;
-            transition: border-color 0.3s;
-            font-family: 'Georgia', serif;
-            border-radius: 5px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #9AB396;
-        }
-
-        /* ✅ PASSWORD EYE ICON - PROFESSIONNEL */
-        .password-wrapper {
-            position: relative;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 16px;
-            color: #9B8B7E;
-            user-select: none;
-            transition: color 0.3s;
-        }
-
-        .toggle-password:hover {
-            color: #5A6B4D;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 18px;
-            background: #9AB396;
+        .service-overlay i {
+            font-size: 4rem;
             color: white;
-            border: none;
-            font-size: 12px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            animation: iconBounce 0.7s ease;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        .service-card h3 {
+            font-family: 'Cormorant Garamond';
+            font-size: 2rem;
+            margin: 30px 30px 15px;
+            font-weight: 500;
+        }
+        
+        .service-card p {
+            font-weight: 300;
+            line-height: 1.7;
+            padding: 0 30px 35px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* --- CTA --- */
+        .contact-cta { 
+            padding: 150px 10%; 
+            text-align: center; 
+        }
+        
+        .btn-luxe {
+            background: var(--text); 
+            color: var(--white); 
+            border: none; 
+            padding: 22px 60px;
+            border-radius: 50px; 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            font-size: 0.7rem;
+            transition: 0.5s;
             cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Georgia', serif;
-            border-radius: 5px;
+            margin-top: 40px;
+        }
+        
+        .btn-luxe:hover { 
+            background: var(--rose-gold); 
+            transform: scale(1.05); 
         }
 
-        .btn-submit:hover {
-            background: #7F9B7A;
-            box-shadow: 0 5px 15px rgba(154, 179, 150, 0.3);
+        footer { 
+            padding: 80px; 
+            text-align: center; 
+            font-size: 0.7rem; 
+            opacity: 0.4; 
+            letter-spacing: 4px; 
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 20px;
+        /* --- RESPONSIVE --- */
+        @media (max-width: 968px) {
+            body, * { cursor: auto !important; }
+            #cursor, #cursor-aura { display: none; }
+            .nav-links { display: none; }
+            .section-story { 
+                grid-template-columns: 1fr; 
+                gap: 50px; 
             }
-
-            .nav-links {
-                gap: 20px;
+            .story-img { 
+                height: 400px; 
             }
-
-            .hero h1 {
-                font-size: 42px;
+            .services-grid { 
+                grid-template-columns: 1fr; 
             }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 30px;
-            }
-
-            .about {
-                grid-template-columns: 1fr;
-            }
-
-            .services, .testimonials, .cta, .footer {
-                padding: 60px 30px;
-            }
-
-            .section-title, .cta h2 {
-                font-size: 36px;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                padding: 40px 30px;
+            .service-image {
+                height: 250px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="logo">GOLDEN PROMISE</div>
+
+    <!-- Système de Pétales -->
+    <div id="petal-field"></div>
+    
+    <!-- UI Elements -->
+    <div id="cursor"></div>
+    <div id="cursor-aura"></div>
+
+    <nav>
+        <a href="#accueil" class="logo magnetic">Golden <span>Promise</span></a>
         <div class="nav-links">
-            <a href="#home">HOME</a>
-            <a href="#services">SERVICES</a>
-            <a href="#about">ABOUT</a>
-            <a href="#contact">CONTACT</a>
-            <button class="btn-login" onclick="openModal()">CONNEXION</button>
+            <a href="#story" class="magnetic">Univers</a>
+            <a href="#services" class="magnetic">Savoir-faire</a>
+            <a href="login.html" class="btn-luxe magnetic" style="padding: 12px 30px; margin: 0; color: white;">Connexion</a>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section class="hero" id="home">
-        <h1>Plan Your Dream Wedding<br>With Us</h1>
-        <p>Let us help you create your perfect wedding day. Browse our selection of trusted vendors and customize every detail, all from the comfort of your home.</p>
-        <div class="hero-buttons">
-            <button class="btn-primary" onclick="openModal()">COMMENCER →</button>
-            <button class="btn-secondary" onclick="location.href='#about'">EXPLORER</button>
-        </div>
-    </section>
-
-    <!-- STATS SECTION -->
-    <section class="stats">
-        <div class="stat-item">
-            <div class="stat-number">500+</div>
-            <div class="stat-label">Happy Couples</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">200+</div>
-            <div class="stat-label">Trusted Vendors</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">15+</div>
-            <div class="stat-label">Years Experience</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Satisfaction</div>
-        </div>
-    </section>
-
-    <!-- SERVICES SECTION -->
-    <section class="services" id="services">
-        <div class="section-header">
-            <div class="section-subtitle">OUR SERVICES</div>
-            <h2 class="section-title">Everything You Need<br>For Your Special Day</h2>
-        </div>
-
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-image" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1555244162-803834f70033?w=800&q=80') center/cover;"></div>
-                <h3 class="service-title">Catering Services</h3>
-                <p class="service-desc">Delight your guests with exceptional cuisine from top-rated caterers</p>
+    <main id="main">
+        <!-- HERO LARGE & IMMERSIF -->
+        <section class="hero" id="accueil">
+            <div class="hero-bg" id="hero-parallax"></div>
+            <div class="hero-content">
+                <p style="letter-spacing: 8px; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 25px; color: var(--text); opacity: 0.6;">Célébrons votre héritage</p>
+                <h1 class="hero-title" id="main-title">
+                    L'Art de Créer<br><em>L'Inoubliable</em>
+                </h1>
             </div>
+        </section>
 
-            <div class="service-card">
-                <div class="service-image" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800&q=80') center/cover;"></div>
-                <h3 class="service-title">Photography</h3>
-                <p class="service-desc">Capture every precious moment with professional wedding photographers</p>
+        <!-- STORY SECTION -->
+        <section class="section-story" id="story">
+            <div class="story-img">
+                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069" alt="Wedding Story">
             </div>
-
-            <div class="service-card">
-                <div class="service-image" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80') center/cover;"></div>
-                <h3 class="service-title">Music & Entertainment</h3>
-                <p class="service-desc">Create the perfect atmosphere with live bands and DJs</p>
+            <div class="story-text">
+                <p style="font-family: 'Parisienne'; font-size: 2.2rem; color: var(--rose-gold); margin-bottom: 10px;">Une promesse éternelle</p>
+                <h2>Façonner vos plus beaux souvenirs.</h2>
+                <p>Nous ne nous contentons pas d'organiser un mariage. Nous dessinons une parenthèse enchantée, une symphonie d'émotions où chaque détail, de la scénographie au parfum des fleurs, est une note de votre histoire.</p>
+                <a href="login.html" style="display:inline-block; margin-top: 30px; border-bottom: 1px solid var(--rose-gold); padding-bottom: 5px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; text-decoration: none; color: inherit;">Découvrir l'agence</a>
             </div>
+        </section>
 
-            <div class="service-card">
-                <div class="service-image" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&q=80') center/cover;"></div>
-                <h3 class="service-title">Floral Design</h3>
-                <p class="service-desc">Beautiful arrangements that bring your wedding vision to life</p>
+        <!-- SERVICES -->
+        <section class="services-wrap" id="services">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h2 style="font-family: 'Cormorant Garamond'; font-size: 3.5rem; font-weight: 300;">Nos Douces Attentions</h2>
             </div>
-
-            <div class="service-card">
-                <div class="service-image" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1594552072238-52dd0f466e0c?w=800&q=80') center/cover;"></div>
-                <h3 class="service-title">Bridal Gowns</h3>
-                <p class="service-desc">Find your perfect dress from our collection of designer wedding gowns</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-image" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=800&q=80') center/cover;"></div>
-                <h3 class="service-title">Wedding Cakes</h3>
-                <p class="service-desc">Custom-designed cakes that are as beautiful as they are delicious</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ABOUT SECTION -->
-    <section class="about" id="about">
-        <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80');"></div>
-        <div class="about-content">
-            <h2>Creating Magical Moments Since 2010</h2>
-            <p>We are passionate about turning your wedding dreams into reality. With over 15 years of experience in the industry, we've helped hundreds of couples plan their perfect day.</p>
-            <p>Our team of dedicated professionals works closely with you to understand your vision and bring it to life, handling every detail so you can focus on what matters most—celebrating your love.</p>
-            <button class="btn-primary" onclick="openModal()">GET IN TOUCH</button>
-        </div>
-    </section>
-
-    <!-- TESTIMONIALS SECTION -->
-    <section class="testimonials">
-        <div class="section-header">
-            <div class="section-subtitle">TESTIMONIALS</div>
-            <h2 class="section-title">What Our Couples Say</h2>
-        </div>
-
-        <div class="testimonial-grid">
-            <div class="testimonial-card">
-                <p class="testimonial-text">"Golden Promise made our wedding planning stress-free and enjoyable. Every detail was perfect, and our guests are still talking about how beautiful everything was!"</p>
-                <div class="testimonial-author">
-                    <div class="author-avatar">S</div>
-                    <div class="author-info">
-                        <h4>Sarah & Michael</h4>
-                        <p>Married June 2025</p>
+            <div class="services-grid">
+                <!-- Scénographie / Décoration -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="../assets/img/decoration.jpg" alt="Décoration Florale">
+                        <div class="service-overlay">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
                     </div>
+                    <h3>Scénographie</h3>
+                    <p>Une esthétique florale unique pour sublimer vos espaces de réception.</p>
                 </div>
-            </div>
 
-            <div class="testimonial-card">
-                <p class="testimonial-text">"We couldn't have asked for a better wedding planner. The team was professional, creative, and made our day absolutely magical. Highly recommend!"</p>
-                <div class="testimonial-author">
-                    <div class="author-avatar">E</div>
-                    <div class="author-info">
-                        <h4>Emma & James</h4>
-                        <p>Married August 2025</p>
+                <!-- Gastronomie -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="../assets/img/traiteur.jpg" alt="Gastronomie">
+                        <div class="service-overlay">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
                     </div>
+                    <h3>Gastronomie</h3>
+                    <p>Une expérience culinaire signée par les plus grands chefs.</p>
                 </div>
-            </div>
 
-            <div class="testimonial-card">
-                <p class="testimonial-text">"From start to finish, Golden Promise exceeded our expectations. They handled everything with such care and attention to detail. Our wedding was a dream come true!"</p>
-                <div class="testimonial-author">
-                    <div class="author-avatar">L</div>
-                    <div class="author-info">
-                        <h4>Lisa & David</h4>
-                        <p>Married September 2025</p>
+                <!-- Photographie -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="../assets/img/photographe.jpg" alt="Photographie">
+                        <div class="service-overlay">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
                     </div>
+                    <h3>Photographie</h3>
+                    <p>Immortaliser chaque instant avec une sensibilité artistique unique.</p>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- CTA SECTION -->
-    <section class="cta" id="contact">
-        <h2>Ready to Start Planning?</h2>
-        <p>Let's create the wedding you've always dreamed of. Contact us today for a free consultation and begin your journey to the perfect day.</p>
-        <button class="btn-primary" onclick="openModal()">SCHEDULE CONSULTATION</button>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <a href="#">Our Story</a>
-                <a href="#">Team</a>
-                <a href="#">Testimonials</a>
-                <a href="#">Blog</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Services</h3>
-                <a href="#">Full Planning</a>
-                <a href="#">Partial Planning</a>
-                <a href="#">Day-of Coordination</a>
-                <a href="#">Vendor Marketplace</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <a href="#">Planning Checklist</a>
-                <a href="#">Budget Calculator</a>
-                <a href="#">Inspiration Gallery</a>
-                <a href="#">FAQs</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <a href="mailto:hello@goldenpromise.com">hello@goldenpromise.com</a>
-                <a href="tel:+212522000000">+212 522 000 000</a>
-                <a href="#">Casablanca, Morocco</a>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 Golden Promise Wedding Planner. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <!-- ✅ MODAL LOGIN AVEC ICÔNE ŒIL PROFESSIONNELLE -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 class="modal-title">Connexion</h2>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="email">Adresse Email</label>
-                    <input type="email" id="email" placeholder="votre@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="password" placeholder="••••••••" required>
-                        <i class="toggle-password fa-solid fa-eye" onclick="togglePassword()"></i>
+                <!-- Animation Musicale -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="../assets/img/animation.jpg" alt="Animation Musicale">
+                        <div class="service-overlay">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
                     </div>
+                    <h3>Musique</h3>
+                    <p>Une ambiance sonore sur-mesure pour sublimer vos émotions.</p>
                 </div>
-                <button type="submit" class="btn-submit">SE CONNECTER</button>
-            </form>
-        </div>
-    </div>
+
+                <!-- Wedding Cake -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="../assets/img/wedding_cake.jpg" alt="Wedding Cake">
+                        <div class="service-overlay">
+                            <i class="fa-solid fa-cake-candles"></i>
+                        </div>
+                    </div>
+                    <h3>Pâtisserie</h3>
+                    <p>Des créations sucrées aussi belles que délicieuses pour sublimer votre réception.</p>
+                </div>
+
+                <!-- Robe de Mariée -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="../assets/img/bridal-gowns.jpg" alt="Robe de Mariée">
+                        <div class="service-overlay">
+                            <i class="fa-solid fa-gem"></i>
+                        </div>
+                    </div>
+                    <h3>Prestige</h3>
+                    <p>La recherche du lieu idéal et des meilleurs artisans du mariage.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA NOSTALGIQUE -->
+        <section class="contact-cta">
+            <h2 style="font-family: 'Parisienne'; font-size: 5rem; color: var(--rose-gold);">Dites-nous "Oui"</h2>
+            <p style="max-width: 600px; margin: 0 auto; font-weight: 300; opacity: 0.7;">Faisons de votre union le plus beau voyage de votre vie. Votre héritage commence ici.</p>
+            <a href="login.html" class="btn-luxe magnetic" style="display: inline-block; text-decoration: none;">Réserver un instant privé</a>
+        </section>
+
+        <footer>
+            © 2026 GOLDEN PROMISE — CRÉATEUR DE BONHEUR ÉTERNEL
+        </footer>
+    </main>
+
+    <!-- Scripts Master Performance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
 
     <script>
-        // Ouvrir le modal de connexion
-        function openModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-        }
+        // ========================================
+        // 1. SMOOTH SCROLL ELITE (LENIS)
+        // ========================================
+        const lenis = new Lenis({ duration: 1.8 });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
 
-        // Fermer le modal
-        function closeModal() {
-            document.getElementById('loginModal').style.display = 'none';
-        }
+        // ========================================
+        // 2. CUSTOM CURSOR LUXE
+        // ========================================
+        const cursor = document.getElementById('cursor');
+        const aura = document.getElementById('cursor-aura');
+        
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
+            gsap.to(aura, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.4 });
+        });
 
-        // ✅ Toggle password visibility avec icône Font Awesome
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.querySelector('.toggle-password');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+        // ========================================
+        // 3. ANIMATION DE PÉTALES (BACKGROUND ROSE)
+        // ========================================
+        const petalContainer = document.getElementById('petal-field');
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const size = Math.random() * 15 + 10 + 'px';
+            petal.style.width = size;
+            petal.style.height = size;
+            petal.style.left = Math.random() * 100 + 'vw';
+            petalContainer.appendChild(petal);
+
+            gsap.to(petal, {
+                y: window.innerHeight + 100,
+                x: '+=150',
+                rotation: 360,
+                duration: Math.random() * 8 + 8,
+                ease: "none",
+                onComplete: () => petal.remove()
+            });
+        }
+        setInterval(createPetal, 1500);
+
+        // ========================================
+        // 4. PARALLAXE SUR LE HEADER LARGE
+        // ========================================
+        gsap.to("#hero-parallax", {
+            yPercent: 20,
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                scrub: true
             }
-        }
+        });
 
-        // Gestion de la connexion
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        // ========================================
+        // 5. MAGNETIC UX
+        // ========================================
+        const magnets = document.querySelectorAll('.magnetic');
+        magnets.forEach(m => {
+            m.addEventListener('mousemove', (e) => {
+                const rect = m.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width/2;
+                const y = e.clientY - rect.top - rect.height/2;
+                gsap.to(m, { x: x * 0.4, y: y * 0.4, duration: 0.4 });
+                gsap.to(aura, { scale: 1.6, borderColor: '#eebcbd', backgroundColor: 'rgba(238, 188, 189, 0.1)' });
+            });
+            m.addEventListener('mouseleave', () => {
+                gsap.to(m, { x: 0, y: 0, duration: 0.4 });
+                gsap.to(aura, { scale: 1, backgroundColor: 'transparent', borderColor: '#c5a059' });
+            });
+        });
 
-            if (!email || !password) {
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
-
-            // Stocker les données dans localStorage
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('isLoggedIn', 'true');
-
-            // Rediriger vers dashboard
-            window.location.href = 'dashboard.html';
-        }
-
-        // Fermer le modal si on clique à l'extérieur
-        window.onclick = function(event) {
-            const modal = document.getElementById('loginModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
+        // ========================================
+        // 6. INTRO
+        // ========================================
+        gsap.from("#main-title", { opacity: 0, y: 50, duration: 2, delay: 0.5 });
 
         // Smooth scroll pour les ancres
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -881,10 +602,7 @@
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    lenis.scrollTo(target, { duration: 2 });
                 }
             });
         });

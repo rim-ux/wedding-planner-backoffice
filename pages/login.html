@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | Golden Promise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Montserrat:wght@300;500;600&family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-gold: #c5a059;
+            --silk: #fcfaf8;
+            --text: #2d2a26;
+            --white: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #fcfaf8 0%, #f5f1eb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            padding: 60px 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+        .logo span {
+            font-family: 'Parisienne', cursive;
+            color: var(--rose-gold);
+            font-size: 3rem;
+        }
+        .subtitle {
+            text-align: center;
+            font-family: 'Parisienne', cursive;
+            font-size: 1.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 40px;
+        }
+
+        /* SWITCH ADMIN/CLIENT */
+        .user-type-switch {
+            display: flex;
+            background: var(--silk);
+            border-radius: 50px;
+            padding: 5px;
+            margin-bottom: 30px;
+        }
+        .switch-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .switch-btn.active {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .switch-btn.admin.active {
+            color: #dc2626;
+        }
+        .switch-btn.client.active {
+            color: var(--rose-gold);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text);
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(197, 160, 89, 0.2);
+            border-radius: 15px;
+            outline: none;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        input:focus {
+            border-color: var(--rose-gold);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-login.admin-btn {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: white;
+        }
+        .btn-login.client-btn {
+            background: linear-gradient(135deg, var(--rose-gold), #a68847);
+            color: white;
+        }
+        .btn-login:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        .register-link.show {
+            display: block;
+        }
+        .register-link a {
+            color: var(--rose-gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link a:hover {
+            color: var(--rose-gold);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo">Golden <span>Promise</span></div>
+        <div class="subtitle">Votre mariage de rêve commence ici</div>
+
+        <!-- SWITCH ADMIN/CLIENT -->
+        <div class="user-type-switch">
+            <button class="switch-btn admin active" onclick="switchType('admin')">
+                <i class="fas fa-user-shield"></i> Admin
+            </button>
+            <button class="switch-btn client" onclick="switchType('client')">
+                <i class="fas fa-heart"></i> Client
+            </button>
+        </div>
+
+        <!-- FORMULAIRE DE CONNEXION -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="votre@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-login admin-btn" id="btnLogin">
+                <i class="fas fa-sign-in-alt"></i> Connexion Admin
+            </button>
+        </form>
+
+        <!-- LIEN INSCRIPTION (Visible seulement pour clients) -->
+        <div class="register-link" id="registerLink">
+            Pas encore de compte ? <a href="client-register.html">S'inscrire</a>
+        </div>
+
+        <!-- LIEN RETOUR -->
+        <div class="back-link">
+            <a href="index.html">← Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <script>
+        let currentType = 'admin';
+
+        function switchType(type) {
+            currentType = type;
+            
+            // Update buttons
+            document.querySelectorAll('.switch-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.switch-btn.${type}`).classList.add('active');
+
+            // Update login button
+            const btnLogin = document.getElementById('btnLogin');
+            if (type === 'admin') {
+                btnLogin.className = 'btn-login admin-btn';
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Connexion Admin';
+                document.getElementById('registerLink').classList.remove('show');
+            } else {
+                btnLogin.className = 'btn-login client-btn';
+                btnLogin.innerHTML = '<i class="fas fa-heart"></i> Connexion Client';
+                document.getElementById('registerLink').classList.add('show');
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (currentType === 'admin') {
+                // CONNEXION ADMIN
+                if (email === 'admin@goldenpromise.com' && password === 'admin123') {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Identifiants admin incorrects');
+                }
+            } else {
+                // CONNEXION CLIENT
+                const allData = JSON.parse(localStorage.getItem('goldenpromise_data') || '{}');
+                const clients = allData.clients || [];
+                
+                const client = clients.find(c => c.email === email);
+                
+                if (client) {
+                    // Vérifier le mot de passe (si existe)
+                    if (client.password && client.password !== password) {
+                        alert('Mot de passe incorrect');
+                        return;
+                    }
+                    
+                    // Sauvegarder la session client
+                    localStorage.setItem('current_client', JSON.stringify(client));
+                    window.location.href = 'client-dashboard.html';
+                } else {
+                    alert('Email ou mot de passe incorrect');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
